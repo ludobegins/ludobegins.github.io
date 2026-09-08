@@ -55,15 +55,46 @@ draft: false
 
 ### Viagem — dados
 
-- Um único `public/viagem/rota.geojson` (unifica `data.geojson` + `data2.geojson`
-  do repo `por-ai`), completado aqui.
+Duas camadas, cruzadas pelo capítulo/região:
+
+**1. Traçado real (Strava).** O traçado passa a ser o GPS de verdade, não mais as
+linhas retas entre pontos do `por-ai`.
+
+- Fonte: **export completo do Strava** (Configurações → Minha conta → _Baixar ou
+  excluir sua conta_ → pedir o arquivo). Chega por e-mail um ZIP com um GPX por
+  atividade + `activities.csv` com os resumos. Sem API, sem token. O ZIP entra no
+  repo como fonte, fora do git (`/strava-export/`, no `.gitignore`).
+- Script local (Node) lê os GPX + o CSV e gera:
+  - `public/viagem/rota.geojson` — o traçado real, simplificado (Douglas–Peucker)
+    pra não pesar, uma feature `LineString` por perna, com `transport`
+    (bicycle | boat | truck), `date`, `distance_km`, `elev_gain_m`, `chapter`.
+  - `src/data/viagem-stats.json` — os números (abaixo), calculados uma vez.
+- 1 atividade do Strava ≈ 1 perna/dia. As pernas são agrupadas em **~7 capítulos
+  por região** (RN → CE → PI/MA → PA → AM → RR → Colômbia) para o scrollytelling.
+- Sem cortar início/fim dos tracks (privacidade ok segundo o autor).
+- Transfers de barco/caminhão: não têm GPS — linha reta tracejada, contados à parte.
+
+**2. Pontos narrativos.** Os ~40 waypoints do `por-ai` seguem como âncoras de
+narrativa, por cima do traçado. `public/viagem/pontos.geojson`, completado à mão.
+
 - Propriedades por ponto: `id`, `place_name_pt/en`, `arrival_date`,
   `transport_to_here` (start | bicycle | boat | truck), `km_traveled`,
-  `notes_pt/en`, e novas: `country`, `state`, `photo?`, `escrito?` (slug de um texto).
-- Números (km, dias, países, estados, subida) calculados no build a partir do GeoJSON.
-- Fotos: agrupar os ~40 pontos em ~7 capítulos por região; ~7–10 fotos-herói
-  para o lançamento. Arquivo em `public/fotos/viagem/<id>.jpg`; script `sharp`
-  gera tamanhos responsivos + placeholder. Fotos dos demais pontos entram aos poucos.
+  `notes_pt/en`, `country`, `state`, `chapter`, `photo?`, `escrito?` (slug de um texto).
+
+**Estatísticas** (lista candidata — enxugar/acrescentar depois):
+
+- distância total de bike (transfers à parte)
+- dias na estrada · dias totais · dias de descanso
+- países e estados/departamentos atravessados
+- subida acumulada · ponto mais alto
+- maior dia em km · maior dia de subida
+- média de km por dia pedalado · nº de pernas
+- tempo total em movimento
+- manuais, se houver dado: furos de pneu, noites acampado…
+
+**Fotos.** Agrupar os ~40 pontos em ~7 capítulos; ~7–10 fotos-herói para o
+lançamento. `public/fotos/viagem/<id>.jpg`; script `sharp` gera tamanhos
+responsivos + placeholder. Fotos dos demais pontos entram aos poucos.
 
 ## Fases
 
@@ -74,8 +105,11 @@ draft: false
       tipo e de tag, RSS, "últimos escritos" na home. 3 poemas reais semeados
       (datas a ajustar). Falta: layout de prosa dedicado se surgir texto longo;
       navegação anterior/próximo entre textos.
-- [ ] **Fase 3 — Viagem.** Portar o GeoJSON, MapLibre + terreno, modo explorar,
-      depois camada de scrollytelling e painel de números. Fallback estático + OG.
+- [ ] **Fase 3 — Viagem.** Script Strava export → `rota.geojson` + `viagem-stats.json`.
+      Completar `pontos.geojson` à mão. MapLibre + terreno 3D, modo explorar
+      (clica no ponto → nota/data/km, filtro por transporte), depois camada de
+      scrollytelling por capítulo e painel de números. Fallback estático + OG.
+      **Pendências do autor:** pedir o export do Strava; completar os pontos/notas.
 - [ ] **Fase 4 — Acabamento.** OG images, SEO/meta, view transitions, passada de
       performance e acessibilidade, favicon próprio, deploy via GitHub Actions.
 

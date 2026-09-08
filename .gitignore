@@ -28,6 +28,9 @@ pnpm-debug.log*
 !.vscode/settings.json
 !.vscode/extensions.json
 
+# Raw Strava export (source for the trip map — processed into public/viagem/)
+strava-export/
+
 # System files
 .DS_Store
 Thumbs.db
