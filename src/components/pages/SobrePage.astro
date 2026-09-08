@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import SocialLinks from '../SocialLinks.astro';
+import { site } from '../../site.config';
 import { type Locale } from '../../i18n/ui';
 import { t } from '../../i18n/utils';
 
@@ -15,7 +16,7 @@ const s = t(locale).sobre;
   <article class="page wrap wrap--prose flow">
     <header class="page__head">
       <p class="eyebrow">{s.eyebrow}</p>
-      <h1>Ludovic Beghin</h1>
+      <h1>{site.fullName}</h1>
     </header>
 
     <div class="bio flow">
