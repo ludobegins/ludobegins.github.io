@@ -1,0 +1,62 @@
+---
+import { href } from '../lib/href';
+import { TIPOS, tipoLabel, type Tipo } from '../lib/escritos';
+
+interface Props {
+  /** which chip is active; undefined = "Todos" */
+  active?: Tipo;
+}
+const { active } = Astro.props;
+
+const chips: { label: string; path: string; key?: Tipo }[] = [
+  { label: 'Todos', path: '/escritos' },
+  ...TIPOS.map((t) => ({ label: tipoLabel[t], path: `/escritos/tipo/${t}`, key: t })),
+];
+---
+
+<nav class="tipo-filter" aria-label="Filtrar por tipo">
+  {
+    chips.map((chip) => (
+      <a
+        href={href(chip.path)}
+        class="tipo-filter__chip"
+        aria-current={chip.key === active || (!chip.key && !active) ? 'true' : undefined}
+      >
+        {chip.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .tipo-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .tipo-filter__chip {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition:
+      color var(--transition),
+      border-color var(--transition),
+      background-color var(--transition);
+  }
+
+  .tipo-filter__chip:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+
+  .tipo-filter__chip[aria-current='true'] {
+    color: var(--bg);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+</style>

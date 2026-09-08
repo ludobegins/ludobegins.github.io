@@ -1,0 +1,146 @@
+---
+import Base from './Base.astro';
+import { href } from '../lib/href';
+import { tipoLabel, formatFullDate, displayTitle, excerpt, type Escrito } from '../lib/escritos';
+
+interface Props {
+  entry: Escrito;
+}
+const { entry } = Astro.props;
+const { data } = entry;
+
+const title = displayTitle(entry);
+const hasTitle = Boolean(data.title?.trim());
+const isVerse = data.tipo === 'poesia';
+---
+
+<Base title={title} description={data.resumo ?? excerpt(entry)}>
+  <article class="escrito wrap wrap--prose">
+    <header class="escrito__head">
+      <p class="escrito__meta">
+        <a href={href('/escritos')}>Escritos</a>
+        <span aria-hidden="true">·</span>
+        <a href={href(`/escritos/tipo/${data.tipo}`)}>{tipoLabel[data.tipo]}</a>
+        <span aria-hidden="true">·</span>
+        <time datetime={data.date.toISOString()}>{formatFullDate(data.date)}</time>
+        {
+          data.local && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{data.local}</span>
+            </>
+          )
+        }
+      </p>
+      {
+        hasTitle ? (
+          <h1 class="escrito__title">{title}</h1>
+        ) : (
+          <h1 class="visually-hidden">{title}</h1>
+        )
+      }
+    </header>
+
+    <div class:list={['escrito__body', { 'escrito__body--verse': isVerse }]}>
+      <slot />
+    </div>
+
+    {
+      data.tags.length > 0 && (
+        <footer class="escrito__foot">
+          <ul class="tags">
+            {data.tags.map((tag) => (
+              <li>
+                <a href={href(`/escritos/tag/${tag}`)}>#{tag}</a>
+              </li>
+            ))}
+          </ul>
+        </footer>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .escrito {
+    padding-top: var(--space-xl);
+  }
+
+  .escrito__head {
+    margin-bottom: var(--space-l);
+  }
+
+  .escrito__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .escrito__meta a {
+    color: var(--ink-faint);
+    text-decoration: none;
+  }
+  .escrito__meta a:hover {
+    color: var(--ink);
+  }
+
+  .escrito__title {
+    margin-top: var(--space-s);
+    font-size: var(--step-3);
+  }
+
+  /* --- the text itself --- */
+  .escrito__body {
+    font-size: var(--step-1);
+    line-height: var(--leading-normal);
+    color: var(--ink);
+  }
+
+  .escrito__body :global(p) {
+    margin-block: 0;
+  }
+
+  .escrito__body :global(p + p) {
+    margin-block-start: var(--space-m);
+  }
+
+  /* verse: keep the poet's line breaks, don't hyphenate or balance.
+     A rare over-long line just wraps flush-left. */
+  .escrito__body--verse {
+    line-height: var(--leading-loose);
+    max-width: 38rem;
+    hyphens: none;
+  }
+
+  .escrito__body--verse :global(p) {
+    text-wrap: pretty;
+  }
+
+  .escrito__foot {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-s);
+    list-style: none;
+    padding: 0;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+  }
+
+  .tags a {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .tags a:hover {
+    color: var(--accent-ink);
+  }
+</style>

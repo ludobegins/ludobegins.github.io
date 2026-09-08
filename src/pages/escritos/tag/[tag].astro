@@ -1,0 +1,44 @@
+---
+import Base from '../../../layouts/Base.astro';
+import EscritoList from '../../../components/EscritoList.astro';
+import { href } from '../../../lib/href';
+import { getEscritos, getTags } from '../../../lib/escritos';
+
+export async function getStaticPaths() {
+  const tags = await getTags();
+  return tags.map(({ tag }) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params as { tag: string };
+const escritos = (await getEscritos()).filter((e) => e.data.tags.includes(tag));
+---
+
+<Base title={`#${tag}`} description={`Textos marcados com #${tag}.`}>
+  <section class="page wrap wrap--prose">
+    <header class="page__head flow">
+      <p class="eyebrow">
+        <a href={href('/escritos')}>Escritos</a>
+      </p>
+      <h1>#{tag}</h1>
+    </header>
+
+    <EscritoList escritos={escritos} />
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--space-xl);
+  }
+  .page__head {
+    --flow-space: var(--space-s);
+    margin-bottom: var(--space-l);
+  }
+  .eyebrow a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .eyebrow a:hover {
+    color: var(--ink);
+  }
+</style>

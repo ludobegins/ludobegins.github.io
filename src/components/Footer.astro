@@ -1,9 +1,9 @@
 ---
 import { site } from '../site.config';
+import { href } from '../lib/href';
 import SocialLinks from './SocialLinks.astro';
 
 const year = new Date().getFullYear();
-// TODO(fase 2): passar rss={href('/rss.xml')} quando o feed existir.
 ---
 
 <footer class="site-footer">
@@ -12,7 +12,7 @@ const year = new Date().getFullYear();
       © {year}
       {site.name}
     </p>
-    <SocialLinks size={18} />
+    <SocialLinks rss={href('/rss.xml')} size={18} />
   </div>
 </footer>
 

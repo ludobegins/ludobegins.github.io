@@ -1,0 +1,36 @@
+---
+import Base from '../../../layouts/Base.astro';
+import EscritoList from '../../../components/EscritoList.astro';
+import TipoFilter from '../../../components/TipoFilter.astro';
+import { getEscritos, TIPOS, tipoLabel, type Tipo } from '../../../lib/escritos';
+
+export async function getStaticPaths() {
+  return TIPOS.map((tipo) => ({ params: { tipo } }));
+}
+
+const { tipo } = Astro.params as { tipo: Tipo };
+const escritos = (await getEscritos()).filter((e) => e.data.tipo === tipo);
+const label = tipoLabel[tipo];
+---
+
+<Base title={label} description={`${label} — textos de Ludovic Beghin.`}>
+  <section class="page wrap wrap--prose">
+    <header class="page__head flow">
+      <p class="eyebrow">Escritos</p>
+      <h1>{label}</h1>
+      <TipoFilter active={tipo} />
+    </header>
+
+    <EscritoList escritos={escritos} empty={`Nenhum texto em ${label.toLowerCase()} ainda.`} />
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--space-xl);
+  }
+  .page__head {
+    --flow-space: var(--space-s);
+    margin-bottom: var(--space-l);
+  }
+</style>

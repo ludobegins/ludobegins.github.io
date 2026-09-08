@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import Icon from '../components/Icon.astro';
+import EscritoCard from '../components/EscritoCard.astro';
 import { href } from '../lib/href';
+import { getEscritos } from '../lib/escritos';
 
 const doors = [
   {
@@ -13,7 +15,7 @@ const doors = [
   {
     href: '/escritos',
     label: 'Escritos',
-    text: 'Poesia em primeiro lugar, com espaço para crônica e ensaio. Filtrável por tipo.',
+    text: 'Poesia em primeiro lugar, mais alguns pensamentos soltos. Filtrável por tipo.',
   },
   {
     href: '/viagem',
@@ -21,6 +23,8 @@ const doors = [
     text: 'Um mapa em 3D dos oito meses que passei atravessando o Brasil de bicicleta.',
   },
 ];
+
+const ultimos = (await getEscritos()).slice(0, 3);
 ---
 
 <Base
@@ -59,6 +63,25 @@ const doors = [
       ))
     }
   </nav>
+
+  {
+    ultimos.length > 0 && (
+      <section class="latest wrap wrap--wide">
+        <div class="latest__head">
+          <h2>Últimos escritos</h2>
+          <a class="latest__all" href={href('/escritos')}>
+            Ver todos
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+        <div class="latest__list">
+          {ultimos.map((entry) => (
+            <EscritoCard entry={entry} />
+          ))}
+        </div>
+      </section>
+    )
+  }
 </Base>
 
 <style>
@@ -92,7 +115,43 @@ const doors = [
   .doors {
     display: grid;
     gap: var(--space-s);
-    padding-bottom: var(--space-xl);
+    padding-bottom: var(--space-l);
+  }
+
+  .latest {
+    padding-bottom: var(--space-2xl);
+  }
+
+  .latest__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .latest__head h2 {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .latest__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .latest__all:hover {
+    color: var(--accent-ink);
+  }
+
+  .latest__list {
+    border-bottom: 1px solid var(--line);
   }
 
   .door {

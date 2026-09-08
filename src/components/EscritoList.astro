@@ -1,0 +1,33 @@
+---
+import EscritoCard from './EscritoCard.astro';
+import type { Escrito } from '../lib/escritos';
+
+interface Props {
+  escritos: Escrito[];
+  empty?: string;
+}
+const { escritos, empty = 'Nada por aqui ainda.' } = Astro.props;
+---
+
+{
+  escritos.length > 0 ? (
+    <div class="escrito-list">
+      {escritos.map((entry) => (
+        <EscritoCard entry={entry} />
+      ))}
+    </div>
+  ) : (
+    <p class="escrito-list__empty">{empty}</p>
+  )
+}
+
+<style>
+  .escrito-list {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .escrito-list__empty {
+    color: var(--ink-soft);
+    padding-block: var(--space-m);
+  }
+</style>
