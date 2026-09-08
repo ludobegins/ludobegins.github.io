@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import { type Locale } from '../../i18n/ui';
+import { t, localeUrl } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const s = t(locale).notFound;
+---
+
+<Base title={s.title} description={s.title}>
+  <section class="page wrap wrap--prose flow">
+    <p class="eyebrow">{s.eyebrow}</p>
+    <h1>{s.heading}</h1>
+    <p>{s.body}</p>
+    <p><a href={localeUrl(locale)}>{s.back}</a></p>
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--space-2xl);
+    --flow-space: var(--space-m);
+  }
+</style>

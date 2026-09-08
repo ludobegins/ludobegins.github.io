@@ -1,6 +1,6 @@
 ---
-import TagPage from '../../../components/pages/TagPage.astro';
-import { getTags } from '../../../lib/escritos';
+import TagPage from '../../../../components/pages/TagPage.astro';
+import { getTags } from '../../../../lib/escritos';
 
 export async function getStaticPaths() {
   const tags = await getTags();
@@ -10,4 +10,4 @@ export async function getStaticPaths() {
 const { tag } = Astro.params as { tag: string };
 ---
 
-<TagPage locale="pt" tag={tag} />
+<TagPage locale="en" tag={tag} />

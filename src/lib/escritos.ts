@@ -1,34 +1,35 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { ui, type Locale } from '../i18n/ui';
 
 export type Escrito = CollectionEntry<'escritos'>;
 
 export const TIPOS = ['poesia', 'pensamentos'] as const;
 export type Tipo = (typeof TIPOS)[number];
 
-export const tipoLabel: Record<Tipo, string> = {
-  poesia: 'Poesia',
-  pensamentos: 'Pensamentos',
-};
+/** Localised label for a tipo, e.g. "Poesia" / "Poetry". */
+export function tipoLabel(tipo: Tipo, locale: Locale): string {
+  return ui[locale].escritos.tipos[tipo];
+}
 
-/** Plural → singular, for "1 poesia" vs "3 poesias". */
-export const tipoLabelPlural: Record<Tipo, string> = {
-  poesia: 'poesias',
-  pensamentos: 'pensamentos',
+const MESES: Record<Locale, string[]> = {
+  pt: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
+  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 };
-
-const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
 // Dates come from YAML as plain "YYYY-MM-DD" — parsed as UTC midnight. Read them
 // back in UTC so a date never slips to the previous day in negative timezones.
 
-/** e.g. "set 2025" */
-export function formatMonthYear(date: Date): string {
-  return `${MESES[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+/** e.g. "set 2025" / "Sep 2025" */
+export function formatMonthYear(date: Date, locale: Locale): string {
+  return `${MESES[locale][date.getUTCMonth()]} ${date.getUTCFullYear()}`;
 }
 
-/** e.g. "20 set 2025" */
-export function formatFullDate(date: Date): string {
-  return `${date.getUTCDate()} ${MESES[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+/** e.g. "20 set 2025" / "Sep 20, 2025" */
+export function formatFullDate(date: Date, locale: Locale): string {
+  const m = MESES[locale][date.getUTCMonth()];
+  const d = date.getUTCDate();
+  const y = date.getUTCFullYear();
+  return locale === 'en' ? `${m} ${d}, ${y}` : `${d} ${m} ${y}`;
 }
 
 export function getSlug(entry: Escrito): string {

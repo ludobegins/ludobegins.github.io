@@ -14,7 +14,15 @@ export default defineConfig({
   site,
   base,
   trailingSlash: 'ignore',
-  integrations: [sitemap()],
+  i18n: {
+    locales: ['pt', 'en'],
+    defaultLocale: 'pt',
+    routing: {
+      // pt lives at the root (/, /sobre); en is prefixed (/en/, /en/sobre).
+      prefixDefaultLocale: false,
+    },
+  },
+  integrations: [sitemap({ i18n: { defaultLocale: 'pt', locales: { pt: 'pt-BR', en: 'en' } } })],
   build: {
     format: 'directory',
   },

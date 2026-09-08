@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import EscritoList from '../EscritoList.astro';
+import { type Locale } from '../../i18n/ui';
+import { t, localeUrl } from '../../i18n/utils';
+import { getEscritos } from '../../lib/escritos';
+
+interface Props {
+  locale: Locale;
+  tag: string;
+}
+const { locale, tag } = Astro.props;
+const s = t(locale).escritos;
+const escritos = (await getEscritos()).filter((e) => e.data.tags.includes(tag));
+---
+
+<Base title={`#${tag}`} description={`#${tag}`}>
+  <section class="page wrap wrap--prose">
+    <header class="page__head flow">
+      <p class="eyebrow">
+        <a href={localeUrl(locale, 'escritos')}>{s.eyebrow}</a>
+      </p>
+      <h1>#{tag}</h1>
+    </header>
+
+    <EscritoList escritos={escritos} locale={locale} empty={s.tagEmpty} />
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--space-xl);
+  }
+  .page__head {
+    --flow-space: var(--space-s);
+    margin-bottom: var(--space-l);
+  }
+  .eyebrow a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .eyebrow a:hover {
+    color: var(--ink);
+  }
+</style>

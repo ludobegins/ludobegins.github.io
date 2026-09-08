@@ -1,24 +1,27 @@
 ---
-import { href } from '../lib/href';
-import { TIPOS, tipoLabel, type Tipo } from '../lib/escritos';
+import { type Locale } from '../i18n/ui';
+import { t, localeUrl } from '../i18n/utils';
+import { TIPOS, type Tipo } from '../lib/escritos';
 
 interface Props {
-  /** which chip is active; undefined = "Todos" */
+  locale: Locale;
+  /** which chip is active; undefined = "all" */
   active?: Tipo;
 }
-const { active } = Astro.props;
+const { locale, active } = Astro.props;
+const strings = t(locale).escritos;
 
 const chips: { label: string; path: string; key?: Tipo }[] = [
-  { label: 'Todos', path: '/escritos' },
-  ...TIPOS.map((t) => ({ label: tipoLabel[t], path: `/escritos/tipo/${t}`, key: t })),
+  { label: strings.all, path: 'escritos' },
+  ...TIPOS.map((key) => ({ label: strings.tipos[key], path: `escritos/tipo/${key}`, key })),
 ];
 ---
 
-<nav class="tipo-filter" aria-label="Filtrar por tipo">
+<nav class="tipo-filter" aria-label={strings.eyebrow}>
   {
     chips.map((chip) => (
       <a
-        href={href(chip.path)}
+        href={localeUrl(locale, chip.path)}
         class="tipo-filter__chip"
         aria-current={chip.key === active || (!chip.key && !active) ? 'true' : undefined}
       >

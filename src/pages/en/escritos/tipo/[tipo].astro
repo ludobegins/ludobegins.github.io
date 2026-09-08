@@ -1,0 +1,12 @@
+---
+import EscritosPage from '../../../../components/pages/EscritosPage.astro';
+import { TIPOS, type Tipo } from '../../../../lib/escritos';
+
+export function getStaticPaths() {
+  return TIPOS.map((tipo) => ({ params: { tipo } }));
+}
+
+const { tipo } = Astro.params as { tipo: Tipo };
+---
+
+<EscritosPage locale="en" tipo={tipo} />

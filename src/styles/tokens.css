@@ -1,34 +1,36 @@
 /* ------------------------------------------------------------------ *
  * Design tokens
- * Palette: warm off-white paper, warm near-black ink, terracotta accent.
+ * Palette: kraft-paper ground, warm brown ink, burnt-orange accent.
  * Colours are defined once on :root (light) and overridden for dark in
  * two places: the system-preference fallback and the explicit toggle.
+ * Type: one humanist grotesque (Hanken Grotesk) for everything.
  * ------------------------------------------------------------------ */
 
 :root {
-  /* --- colour: light --- */
-  --bg: #faf6f0;
-  --surface: #f2ebdf;
-  --surface-2: #ece2d2;
-  --ink: #221d19;
-  --ink-soft: #5b5147;
-  --ink-faint: #8b8072;
-  --accent: #b04e2d;
-  --accent-ink: #8f3d21; /* accent text on light bg, AA on --bg */
-  --accent-soft: rgba(176, 78, 45, 0.12);
-  --line: rgba(34, 29, 25, 0.14);
-  --line-strong: rgba(34, 29, 25, 0.28);
-  --selection: rgba(176, 78, 45, 0.22);
-  --shadow: 0 1px 2px rgba(34, 29, 25, 0.06), 0 8px 24px rgba(34, 29, 25, 0.08);
+  /* --- colour: light (kraft paper) --- */
+  --bg: #f4ead6;
+  --surface: #ecdfc4;
+  --surface-2: #e4d3b2;
+  --ink: #2a2019;
+  --ink-soft: #6a5a46;
+  --ink-faint: #93826a;
+  --accent: #c1571e;
+  --accent-ink: #9c4416; /* accent text on light bg, ≥AA on --bg */
+  --accent-soft: rgba(193, 87, 30, 0.12);
+  --line: rgba(42, 32, 25, 0.14);
+  --line-strong: rgba(42, 32, 25, 0.3);
+  --selection: rgba(193, 87, 30, 0.22);
+  --shadow: 0 1px 2px rgba(42, 32, 25, 0.07), 0 10px 28px rgba(42, 32, 25, 0.1);
 
   /* --- type --- */
-  --font-serif: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
-  --font-ui:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-text:
+    'Hanken Grotesk Variable', 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  --font-ui: var(--font-text);
   --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
 
   /* fluid modular scale (~1.2 mobile, ~1.25 desktop), base ~17px */
-  --step--1: clamp(0.87rem, 0.84rem + 0.15vw, 0.95rem);
+  --step--1: clamp(0.85rem, 0.82rem + 0.14vw, 0.93rem);
   --step-0: clamp(1.0625rem, 1.03rem + 0.18vw, 1.15rem);
   --step-1: clamp(1.27rem, 1.2rem + 0.36vw, 1.5rem);
   --step-2: clamp(1.52rem, 1.38rem + 0.7vw, 1.95rem);
@@ -36,14 +38,14 @@
   --step-4: clamp(2.2rem, 1.83rem + 1.83vw, 3.3rem);
   --step-5: clamp(2.63rem, 2.05rem + 2.9vw, 4.3rem);
 
-  --leading-tight: 1.15;
+  --leading-tight: 1.12;
   --leading-snug: 1.32;
-  --leading-normal: 1.62;
-  --leading-loose: 1.85;
+  --leading-normal: 1.6;
+  --leading-loose: 1.9;
 
-  --tracking-tight: -0.015em;
+  --tracking-tight: -0.02em;
   --tracking-normal: 0;
-  --tracking-wide: 0.08em;
+  --tracking-wide: 0.09em;
 
   /* --- space (rem-based, roughly 1.5 ratio) --- */
   --space-3xs: 0.25rem;
@@ -57,7 +59,7 @@
   --space-3xl: 8rem;
 
   /* --- layout --- */
-  --measure: 63ch; /* prose line length */
+  --measure: 66ch; /* prose line length */
   --content-width: 44rem; /* default column */
   --wide-width: 72rem; /* wide sections */
   --radius: 6px;
@@ -72,37 +74,37 @@
 /* dark — system preference, only when the user has not forced light */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #15120f;
-    --surface: #1e1a15;
-    --surface-2: #26211a;
-    --ink: #ece4d7;
-    --ink-soft: #b2a593;
-    --ink-faint: #7c7160;
-    --accent: #e07d52;
-    --accent-ink: #ec9067;
-    --accent-soft: rgba(224, 125, 82, 0.16);
-    --line: rgba(236, 228, 215, 0.14);
-    --line-strong: rgba(236, 228, 215, 0.28);
-    --selection: rgba(224, 125, 82, 0.28);
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.5);
+    --bg: #191308;
+    --surface: #241c10;
+    --surface-2: #2f2415;
+    --ink: #f0e4cd;
+    --ink-soft: #c4b18f;
+    --ink-faint: #8c7c5f;
+    --accent: #e67e3f;
+    --accent-ink: #ef955f;
+    --accent-soft: rgba(230, 126, 63, 0.16);
+    --line: rgba(240, 228, 205, 0.14);
+    --line-strong: rgba(240, 228, 205, 0.3);
+    --selection: rgba(230, 126, 63, 0.28);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 12px 32px rgba(0, 0, 0, 0.55);
     color-scheme: dark;
   }
 }
 
 /* dark — explicit toggle, wins in both directions */
 :root[data-theme='dark'] {
-  --bg: #15120f;
-  --surface: #1e1a15;
-  --surface-2: #26211a;
-  --ink: #ece4d7;
-  --ink-soft: #b2a593;
-  --ink-faint: #7c7160;
-  --accent: #e07d52;
-  --accent-ink: #ec9067;
-  --accent-soft: rgba(224, 125, 82, 0.16);
-  --line: rgba(236, 228, 215, 0.14);
-  --line-strong: rgba(236, 228, 215, 0.28);
-  --selection: rgba(224, 125, 82, 0.28);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.5);
+  --bg: #191308;
+  --surface: #241c10;
+  --surface-2: #2f2415;
+  --ink: #f0e4cd;
+  --ink-soft: #c4b18f;
+  --ink-faint: #8c7c5f;
+  --accent: #e67e3f;
+  --accent-ink: #ef955f;
+  --accent-soft: rgba(230, 126, 63, 0.16);
+  --line: rgba(240, 228, 205, 0.14);
+  --line-strong: rgba(240, 228, 205, 0.3);
+  --selection: rgba(230, 126, 63, 0.28);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 12px 32px rgba(0, 0, 0, 0.55);
   color-scheme: dark;
 }

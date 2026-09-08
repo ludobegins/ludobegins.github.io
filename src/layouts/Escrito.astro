@@ -1,13 +1,16 @@
 ---
 import Base from './Base.astro';
-import { href } from '../lib/href';
+import { type Locale } from '../i18n/ui';
+import { t, localeUrl } from '../i18n/utils';
 import { tipoLabel, formatFullDate, displayTitle, excerpt, type Escrito } from '../lib/escritos';
 
 interface Props {
   entry: Escrito;
+  locale: Locale;
 }
-const { entry } = Astro.props;
+const { entry, locale } = Astro.props;
 const { data } = entry;
+const strings = t(locale).escritos;
 
 const title = displayTitle(entry);
 const hasTitle = Boolean(data.title?.trim());
@@ -18,11 +21,11 @@ const isVerse = data.tipo === 'poesia';
   <article class="escrito wrap wrap--prose">
     <header class="escrito__head">
       <p class="escrito__meta">
-        <a href={href('/escritos')}>Escritos</a>
+        <a href={localeUrl(locale, 'escritos')}>{strings.eyebrow}</a>
         <span aria-hidden="true">·</span>
-        <a href={href(`/escritos/tipo/${data.tipo}`)}>{tipoLabel[data.tipo]}</a>
+        <a href={localeUrl(locale, `escritos/tipo/${data.tipo}`)}>{tipoLabel(data.tipo, locale)}</a>
         <span aria-hidden="true">·</span>
-        <time datetime={data.date.toISOString()}>{formatFullDate(data.date)}</time>
+        <time datetime={data.date.toISOString()}>{formatFullDate(data.date, locale)}</time>
         {
           data.local && (
             <>
@@ -51,7 +54,7 @@ const isVerse = data.tipo === 'poesia';
           <ul class="tags">
             {data.tags.map((tag) => (
               <li>
-                <a href={href(`/escritos/tag/${tag}`)}>#{tag}</a>
+                <a href={localeUrl(locale, `escritos/tag/${tag}`)}>#{tag}</a>
               </li>
             ))}
           </ul>

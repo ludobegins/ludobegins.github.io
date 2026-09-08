@@ -1,6 +1,6 @@
 ---
-import '@fontsource-variable/newsreader/standard.css';
-import '@fontsource-variable/newsreader/standard-italic.css';
+import '@fontsource-variable/hanken-grotesk/index.css';
+import '@fontsource-variable/hanken-grotesk/wght-italic.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 
@@ -8,39 +8,45 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../site.config';
 import { href } from '../lib/href';
+import { htmlLang } from '../i18n/ui';
+import { getLocale, t, alternateUrl } from '../i18n/utils';
 
 interface Props {
   title?: string;
   description?: string;
   /** Path to an OG image under /public, root-absolute. */
   image?: string;
-  /** Set on long-form reading pages to widen vertical rhythm, etc. */
   bodyClass?: string;
-  /** lang override for EN pages */
-  lang?: string;
 }
+
+const locale = getLocale(Astro.currentLocale);
+const strings = t(locale);
 
 const {
   title,
-  description = site.description,
+  description = strings.siteDescription,
   image = '/ludo.jpg',
   bodyClass,
-  lang = site.lang,
 } = Astro.props;
 
 const pageTitle = title ? `${title} — ${site.name}` : site.name;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(href(image), Astro.site).href;
+
+const alt = alternateUrl(Astro.url.pathname, locale);
+const altHref = new URL(alt.url, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={htmlLang[locale]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={htmlLang[locale]} href={canonical} />
+    <link rel="alternate" hreflang={htmlLang[alt.locale]} href={altHref} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
@@ -48,6 +54,7 @@ const ogImage = new URL(href(image), Astro.site).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={htmlLang[locale].replace('-', '_')} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" href={href('/favicon.ico')} sizes="any" />
@@ -57,8 +64,8 @@ const ogImage = new URL(href(image), Astro.site).href;
       title={`${site.name} — Escritos`}
       href={href('/rss.xml')}
     />
-    <meta name="theme-color" content="#faf6f0" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#15120f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4ead6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#191308" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />
 
     {/* Set the theme before first paint to avoid a flash. */}
@@ -74,8 +81,8 @@ const ogImage = new URL(href(image), Astro.site).href;
     </script>
   </head>
   <body class={bodyClass}>
-    <a class="skip-link" href="#main">Pular para o conteúdo</a>
-    <Header />
+    <a class="skip-link" href="#main">{strings.skip}</a>
+    <Header locale={locale} />
     <main id="main">
       <slot />
     </main>

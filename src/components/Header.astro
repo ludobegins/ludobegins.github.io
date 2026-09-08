@@ -1,22 +1,40 @@
 ---
-import { nav, site } from '../site.config';
-import { href, isActive } from '../lib/href';
+import { site } from '../site.config';
+import { localeName, type Locale } from '../i18n/ui';
+import { t, localeUrl, alternateUrl, isActive } from '../i18n/utils';
 import ThemeToggle from './ThemeToggle.astro';
 
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const strings = t(locale);
 const pathname = Astro.url.pathname;
+
+const items = [
+  { label: strings.nav.sobre, path: 'sobre' },
+  { label: strings.nav.escritos, path: 'escritos' },
+  { label: strings.nav.viagem, path: 'viagem' },
+];
+
+const alt = alternateUrl(pathname, locale);
+const altLabel = alt.locale.toUpperCase();
 ---
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="wordmark" href={href('/')}>{site.wordmark}</a>
+    <a class="wordmark" href={localeUrl(locale)} aria-label={site.name}>
+      <span class="wordmark__full">{site.wordmark}</span>
+      <span class="wordmark__short" aria-hidden="true">LB</span>
+    </a>
 
-    <nav class="site-nav" aria-label="Navegação principal">
+    <nav class="site-nav" aria-label={strings.nav.aria}>
       {
-        nav.map((item) => (
+        items.map((item) => (
           <a
-            href={href(item.href)}
+            href={localeUrl(locale, item.path)}
             class="site-nav__link"
-            aria-current={isActive(pathname, item.href) ? 'page' : undefined}
+            aria-current={isActive(pathname, item.path) ? 'page' : undefined}
           >
             {item.label}
           </a>
@@ -24,7 +42,17 @@ const pathname = Astro.url.pathname;
       }
     </nav>
 
-    <ThemeToggle />
+    <div class="site-header__tools">
+      <a
+        class="lang-toggle"
+        href={alt.url}
+        aria-label={`${strings.langToggleAria}: ${localeName[alt.locale]}`}
+        hreflang={alt.locale}
+      >
+        {altLabel}
+      </a>
+      <ThemeToggle label={strings.themeToggle} />
+    </div>
   </div>
 </header>
 
@@ -40,7 +68,6 @@ const pathname = Astro.url.pathname;
     transition: border-color var(--transition);
   }
 
-  /* hairline appears once the page is scrolled (see script) */
   .site-header[data-scrolled] {
     border-bottom-color: var(--line);
   }
@@ -57,7 +84,7 @@ const pathname = Astro.url.pathname;
 
   .wordmark {
     font-size: var(--step-0);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: var(--tracking-tight);
     text-decoration: none;
     margin-right: auto;
@@ -66,6 +93,10 @@ const pathname = Astro.url.pathname;
 
   .wordmark:hover {
     color: var(--ink);
+  }
+
+  .wordmark__short {
+    display: none;
   }
 
   .site-nav {
@@ -102,13 +133,43 @@ const pathname = Astro.url.pathname;
     border-radius: 2px;
   }
 
-  @media (max-width: 30rem) {
+  .site-header__tools {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .lang-toggle {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius);
+  }
+
+  .lang-toggle:hover {
+    color: var(--ink);
+    background: var(--accent-soft);
+  }
+
+  @media (max-width: 34rem) {
     .site-header__inner {
       gap: var(--space-s);
       padding-inline: var(--space-s);
     }
-    .wordmark {
-      font-size: var(--step--1);
+    .site-nav {
+      gap: 0.9rem;
+    }
+    .wordmark__full {
+      display: none;
+    }
+    .wordmark__short {
+      display: inline;
+      font-size: var(--step-0);
+      letter-spacing: 0.02em;
     }
   }
 </style>

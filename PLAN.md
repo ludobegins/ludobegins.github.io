@@ -11,41 +11,46 @@ seção de escritos (poesia em primeiro lugar) e um mapa 3D da viagem de bicicle
 
 ## Decisões tomadas
 
-| Tema               | Decisão                                                                                                                 |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| Framework          | **Astro** (recomeço do zero). Conteúdo estático + 1 ilha pesada (mapa).                                                 |
-| Idiomas            | Site em **PT**. Seção profissional também em **EN** (`/sobre` ↔ `/about`). Poemas no original.                          |
-| Seção profissional | **Enxuta**: bio + poucos projetos + contato. Sem timeline nem CV em PDF (por ora).                                      |
-| Viagem             | **Scrollytelling** (câmera voando pela rota, texto e foto por trecho) **+ modo explorar** livre no fim.                 |
-| Mapa               | **MapLibre GL JS** (open source, sem API token — importante em repo público). Terreno 3D nativo.                        |
-| Hospedagem         | **GitHub Pages** (já configurado). `base: '/ludoblog'`. Se o repo virar `ludobegins.github.io`, mudar para `base: '/'`. |
-| Cor de acento      | **Terracota / ocre** sobre papel off-white quente. Dark mode (sistema + toggle).                                        |
-| Tipografia         | **Newsreader** (serifa literária, com eixo óptico) para títulos, poemas e prosa. Sans do sistema para a interface.      |
-| Comentários        | Não, por enquanto. (Depois: giscus, se fizer sentido.)                                                                  |
+| Tema               | Decisão                                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| Framework          | **Astro** (recomeço do zero). Conteúdo estático + 1 ilha pesada (mapa).                                                         |
+| Idiomas            | **PT + EN em todo o site** (Astro i18n; PT na raiz, EN em `/en/`). Toggle no header. Só o conteúdo dos poemas fica no original. |
+| Seção profissional | **Enxuta**: bio + poucos projetos + contato. Sem timeline nem CV em PDF (por ora).                                              |
+| Viagem             | **Scrollytelling** (câmera voando pela rota, texto e foto por trecho) **+ modo explorar** livre no fim.                         |
+| Mapa               | **MapLibre GL JS** (open source, sem API token — importante em repo público). Terreno 3D nativo.                                |
+| Hospedagem         | **GitHub Pages** (já configurado). `base: '/ludoblog'`. Se o repo virar `ludobegins.github.io`, mudar para `base: '/'`.         |
+| Cor de acento      | **Laranja queimado / ocre** sobre papel kraft (fundo cor de areia). Dark mode marrom-escuro (sistema + toggle).                 |
+| Tipografia         | **Hanken Grotesk** (sans humanista, variável) para tudo — títulos, corpo e verso.                                               |
+| Comentários        | Não, por enquanto. (Depois: giscus, se fizer sentido.)                                                                          |
 
 ## Arquitetura de conteúdo
 
-| Rota                | Conteúdo                                                                                      |
-| ------------------- | --------------------------------------------------------------------------------------------- |
-| `/`                 | Frase de abertura + 3 "portas" (Sobre / Escritos / Viagem) + links. Depois: últimos escritos. |
-| `/sobre` + `/about` | Versão enxuta, PT e EN, com seletor de idioma discreto.                                       |
-| `/escritos`         | Lista filtrável por `tipo`; `/escritos/:slug`; `/escritos/tag/:tag`; `rss.xml`.               |
-| `/viagem`           | Scrollytelling por capítulo → modo explorar + painel de números.                              |
+Cada rota PT tem um espelho em `/en/` (mesmos slugs). Textos localizados vêm de
+`src/i18n/ui.ts`; os corpos das páginas ficam em `src/components/pages/*Page.astro`
+e recebem `locale`.
+
+| Rota                     | Conteúdo                                                                                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/` · `/en/`             | Frase de abertura + 3 "portas" (Sobre / Escritos / Viagem) + links + últimos escritos.                                                                 |
+| `/sobre` · `/en/sobre`   | Versão enxuta, PT e EN.                                                                                                                                |
+| `/escritos` · `/en/...`  | Lista filtrável por `tipo`; `/escritos/:slug`; `/escritos/tipo/:tipo`; `/escritos/tag/:tag`; `rss.xml` (feed PT). Corpo dos poemas sempre no original. |
+| `/viagem` · `/en/viagem` | Scrollytelling por capítulo → modo explorar + painel de números.                                                                                       |
 
 ### Modelo dos escritos (Markdown + frontmatter)
 
 ```yaml
-title: '…'
+# title e resumo são opcionais; sem title usa-se o primeiro verso
 date: 2026-02-14
-tipo: poesia # poesia | crônica | ensaio | conto | nota  (enum fechado, obrigatório)
+tipo: poesia # poesia | pensamentos  (enum fechado, default poesia)
 tags: [viagem, saudade] # livres, opcionais
-resumo: '…' # opcional — listagem e RSS
 draft: false
+# slug: opcional, sobrescreve o nome do arquivo
 ```
 
-- Layout de **poema** ≠ layout de **prosa**: poema com serifa de display,
-  entrelinha ampla, estrofes e quebras preservadas, sem "tempo de leitura";
-  prosa com medida de ~63ch e tempo de leitura.
+- `tipo: poesia` → layout de verso: quebras de linha preservadas (`remark-breaks`),
+  estrofes com respiro, sem "tempo de leitura", sem `<h1>` visível quando não há título.
+- Layout de prosa dedicado (medida ~63ch, tempo de leitura) fica para quando
+  surgir um texto longo.
 - Schema validado por Zod em `src/content.config.ts`.
 
 ### Viagem — dados

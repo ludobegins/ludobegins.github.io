@@ -1,19 +1,21 @@
 ---
 import EscritoCard from './EscritoCard.astro';
+import { type Locale } from '../i18n/ui';
 import type { Escrito } from '../lib/escritos';
 
 interface Props {
   escritos: Escrito[];
+  locale: Locale;
   empty?: string;
 }
-const { escritos, empty = 'Nada por aqui ainda.' } = Astro.props;
+const { escritos, locale, empty = '—' } = Astro.props;
 ---
 
 {
   escritos.length > 0 ? (
     <div class="escrito-list">
       {escritos.map((entry) => (
-        <EscritoCard entry={entry} />
+        <EscritoCard entry={entry} locale={locale} />
       ))}
     </div>
   ) : (

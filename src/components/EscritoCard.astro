@@ -1,5 +1,6 @@
 ---
-import { href } from '../lib/href';
+import { type Locale } from '../i18n/ui';
+import { localeUrl } from '../i18n/utils';
 import {
   tipoLabel,
   formatMonthYear,
@@ -11,20 +12,21 @@ import {
 
 interface Props {
   entry: Escrito;
+  locale: Locale;
 }
-const { entry } = Astro.props;
+const { entry, locale } = Astro.props;
 const title = displayTitle(entry);
 const hasTitle = Boolean(entry.data.title?.trim());
 const sub = hasTitle ? firstLine(entry) : null;
 ---
 
-<a class="card" href={href(`/escritos/${getSlug(entry)}`)}>
+<a class="card" href={localeUrl(locale, `escritos/${getSlug(entry)}`)}>
   <span class="card__title">{title}</span>
   {sub && <span class="card__sub">{sub}</span>}
   <span class="card__meta">
-    {tipoLabel[entry.data.tipo]}
+    {tipoLabel(entry.data.tipo, locale)}
     <span aria-hidden="true">·</span>
-    {formatMonthYear(entry.data.date)}
+    {formatMonthYear(entry.data.date, locale)}
   </span>
 </a>
 

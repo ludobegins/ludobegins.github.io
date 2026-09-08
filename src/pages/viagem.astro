@@ -1,36 +1,5 @@
 ---
-import Base from '../layouts/Base.astro';
+import ViagemPage from '../components/pages/ViagemPage.astro';
 ---
 
-<Base
-  title="Viagem"
-  description="Mapa 3D da travessia de bicicleta de Ludovic Beghin, de Natal à Venezuela."
->
-  <section class="page wrap wrap--prose flow">
-    <p class="eyebrow">Viagem</p>
-    <h1>De Natal à Venezuela, de bicicleta</h1>
-    <p class="lead">
-      Oito meses, milhares de quilômetros, um caderno de anotações. Estou reconstruindo o mapa em 3D
-      aqui — com voo de câmera pela rota, fotos do caminho e um modo de exploração livre.
-    </p>
-    <p>
-      Enquanto isso, a primeira versão vive em
-      <a href="https://ludobegins.github.io/por-ai/" target="_blank" rel="noopener noreferrer">
-        ludobegins.github.io/por-ai
-      </a>.
-    </p>
-  </section>
-</Base>
-
-<style>
-  .page {
-    padding-top: var(--space-xl);
-    --flow-space: var(--space-m);
-  }
-  .lead {
-    font-size: var(--step-1);
-    color: var(--ink-soft);
-    line-height: var(--leading-snug);
-    max-width: 46ch;
-  }
-</style>
+<ViagemPage locale="pt" />

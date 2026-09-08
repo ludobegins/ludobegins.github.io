@@ -1,20 +1,5 @@
 ---
-import Base from '../layouts/Base.astro';
-import { href } from '../lib/href';
+import NotFoundPage from '../components/pages/NotFoundPage.astro';
 ---
 
-<Base title="Página não encontrada">
-  <section class="page wrap wrap--prose flow">
-    <p class="eyebrow">Erro 404</p>
-    <h1>Esta página não existe</h1>
-    <p>O link pode estar quebrado, ou a página pode ter mudado de lugar.</p>
-    <p><a href={href('/')}>Voltar para o início</a></p>
-  </section>
-</Base>
-
-<style>
-  .page {
-    padding-top: var(--space-2xl);
-    --flow-space: var(--space-m);
-  }
-</style>
+<NotFoundPage locale="pt" />

@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import EscritoList from '../EscritoList.astro';
+import TipoFilter from '../TipoFilter.astro';
+import { type Locale } from '../../i18n/ui';
+import { t } from '../../i18n/utils';
+import { getEscritos, type Tipo } from '../../lib/escritos';
+
+interface Props {
+  locale: Locale;
+  /** filter to a single tipo (tipo pages) */
+  tipo?: Tipo;
+}
+const { locale, tipo } = Astro.props;
+const s = t(locale).escritos;
+
+let escritos = await getEscritos();
+if (tipo) escritos = escritos.filter((e) => e.data.tipo === tipo);
+
+const heading = tipo ? s.tipos[tipo] : s.heading;
+const empty = tipo ? s.tipoEmpty(s.tipos[tipo]) : s.empty;
+---
+
+<Base title={tipo ? s.tipos[tipo] : s.title} description={s.metaDescription}>
+  <section class="page wrap wrap--prose">
+    <header class="page__head flow">
+      <p class="eyebrow">{s.eyebrow}</p>
+      <h1>{heading}</h1>
+      {!tipo && <p class="lead">{s.lead}</p>}
+      <TipoFilter locale={locale} active={tipo} />
+    </header>
+
+    <EscritoList escritos={escritos} locale={locale} empty={empty} />
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--space-xl);
+  }
+
+  .page__head {
+    --flow-space: var(--space-s);
+    margin-bottom: var(--space-l);
+  }
+
+  .lead {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    line-height: var(--leading-snug);
+    max-width: 44ch;
+  }
+</style>
