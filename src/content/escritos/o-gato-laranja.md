@@ -1,6 +1,6 @@
 ---
 title: O gato laranja
-date: 2025-10-15
+date: 2026-06-15
 tipo: poesia
 tags: [viagem]
 ---

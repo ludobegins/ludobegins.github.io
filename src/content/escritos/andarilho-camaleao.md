@@ -1,6 +1,6 @@
 ---
 title: Andarilho camaleão
-date: 2025-09-20
+date: 2026-09-06
 tipo: poesia
 tags: [viagem]
 ---
