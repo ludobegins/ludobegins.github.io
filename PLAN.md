@@ -64,8 +64,11 @@ draft: false
 
 - [x] **Fase 1 — Base.** Scaffold Astro, design tokens (cor/tipografia/espaço),
       dark mode, header/footer, deploy config. Páginas `/`, `/sobre`, `/about`, 404. Stubs de `/escritos` e `/viagem`.
-- [ ] **Fase 2 — Escritos.** Content collection + schema, listagem, layouts
-      poema/prosa, páginas de tag, RSS, sitemap dos posts. Semear com 2–3 textos reais.
+- [x] **Fase 2 — Escritos.** Content collection + schema (`poesia` | `pensamentos`),
+      listagem com filtro por tipo, layout de verso (remark-breaks), páginas de
+      tipo e de tag, RSS, "últimos escritos" na home. 3 poemas reais semeados
+      (datas a ajustar). Falta: layout de prosa dedicado se surgir texto longo;
+      navegação anterior/próximo entre textos.
 - [ ] **Fase 3 — Viagem.** Portar o GeoJSON, MapLibre + terreno, modo explorar,
       depois camada de scrollytelling e painel de números. Fallback estático + OG.
 - [ ] **Fase 4 — Acabamento.** OG images, SEO/meta, view transitions, passada de
