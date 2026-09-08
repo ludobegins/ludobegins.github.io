@@ -1,0 +1,72 @@
+---
+import Icon from './Icon.astro';
+---
+
+<button type="button" class="theme-toggle" aria-label="Alternar tema claro/escuro" title="Tema">
+  <span class="theme-toggle__sun"><Icon name="sun" size={18} /></span>
+  <span class="theme-toggle__moon"><Icon name="moon" size={18} /></span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    color: var(--ink-soft);
+    transition:
+      color var(--transition),
+      background-color var(--transition);
+  }
+
+  .theme-toggle:hover {
+    color: var(--ink);
+    background: var(--accent-soft);
+  }
+
+  .theme-toggle__sun {
+    display: none;
+  }
+  .theme-toggle__moon {
+    display: flex;
+  }
+
+  :global(:root[data-theme='dark']) .theme-toggle__sun {
+    display: flex;
+  }
+  :global(:root[data-theme='dark']) .theme-toggle__moon {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .theme-toggle__sun {
+      display: flex;
+    }
+    :global(:root:not([data-theme='light'])) .theme-toggle__moon {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function systemDark() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  function currentTheme(): 'light' | 'dark' {
+    const forced = document.documentElement.dataset.theme;
+    if (forced === 'light' || forced === 'dark') return forced;
+    return systemDark() ? 'dark' : 'light';
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((el) => {
+    el.addEventListener('click', () => {
+      const next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch (e) {}
+    });
+  });
+</script>

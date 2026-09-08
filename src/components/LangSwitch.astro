@@ -1,0 +1,47 @@
+---
+import { href } from '../lib/href';
+
+interface Props {
+  /** current language of the page */
+  current: 'pt' | 'en';
+  /** path to the pt version */
+  pt: string;
+  /** path to the en version */
+  en: string;
+}
+const { current, pt, en } = Astro.props;
+---
+
+<div class="lang-switch" role="group" aria-label="Idioma / Language">
+  <a href={href(pt)} aria-current={current === 'pt' ? 'true' : undefined} hreflang="pt-BR">PT</a>
+  <span aria-hidden="true">/</span>
+  <a href={href(en)} aria-current={current === 'en' ? 'true' : undefined} hreflang="en">EN</a>
+</div>
+
+<style>
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .lang-switch a {
+    text-decoration: none;
+    color: var(--ink-faint);
+    padding: 0.15rem 0.1rem;
+  }
+
+  .lang-switch a:hover {
+    color: var(--ink);
+  }
+
+  .lang-switch a[aria-current='true'] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-color: var(--accent);
+  }
+</style>

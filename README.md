@@ -1,59 +1,37 @@
-# Ludoblog
+# ludoblog
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.3.
+Site pessoal do Ludovic Beghin — seção profissional, escritos (poesia e prosa) e
+um mapa 3D de uma viagem de bicicleta. Feito com [Astro](https://astro.build),
+sem backend, publicado no GitHub Pages.
 
-## Development server
+O planejamento e o roteiro de fases estão em [`PLAN.md`](./PLAN.md).
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Desenvolvimento
 
 ```bash
-ng generate component component-name
+npm install
+npm run dev       # http://localhost:4321/ludoblog/
+npm run build     # gera dist/
+npm run preview   # serve o build
+npm run format    # prettier
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Estrutura
 
-```bash
-ng generate --help
+```
+src/
+  layouts/Base.astro        # shell HTML, <head>, header + footer
+  components/                # Header, Footer, ThemeToggle, SocialLinks, Icon, LangSwitch
+  pages/                     # rotas (index, sobre, about, escritos, viagem, 404)
+  styles/tokens.css          # design tokens (cor, tipografia, espaço)
+  styles/base.css            # reset + defaults + helpers de layout
+  site.config.ts             # nome, navegação, links sociais
+  lib/href.ts                # helper de URL que respeita o `base` do Astro
+public/                      # imagens e assets estáticos
 ```
 
-## Building
+## Deploy
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Configurado para GitHub Pages como _project site_
+(`https://ludobegins.github.io/ludoblog/`). Se o repositório for renomeado para
+`ludobegins.github.io`, ajustar `base` em `astro.config.mjs` para `'/'`.

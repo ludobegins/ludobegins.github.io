@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="Escritos" description="Poemas e outros textos de Ludovic Beghin.">
+  <section class="page wrap wrap--prose flow">
+    <p class="eyebrow">Escritos</p>
+    <h1>Poemas e outros textos</h1>
+    <p class="lead">
+      Esta seção está sendo construída. Em breve: poesia, crônica e ensaio, com filtro por tipo e
+      por tema.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--space-xl);
+    --flow-space: var(--space-m);
+  }
+  .lead {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    line-height: var(--leading-snug);
+    max-width: 40ch;
+  }
+</style>

@@ -1,0 +1,108 @@
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * Palette: warm off-white paper, warm near-black ink, terracotta accent.
+ * Colours are defined once on :root (light) and overridden for dark in
+ * two places: the system-preference fallback and the explicit toggle.
+ * ------------------------------------------------------------------ */
+
+:root {
+  /* --- colour: light --- */
+  --bg: #faf6f0;
+  --surface: #f2ebdf;
+  --surface-2: #ece2d2;
+  --ink: #221d19;
+  --ink-soft: #5b5147;
+  --ink-faint: #8b8072;
+  --accent: #b04e2d;
+  --accent-ink: #8f3d21; /* accent text on light bg, AA on --bg */
+  --accent-soft: rgba(176, 78, 45, 0.12);
+  --line: rgba(34, 29, 25, 0.14);
+  --line-strong: rgba(34, 29, 25, 0.28);
+  --selection: rgba(176, 78, 45, 0.22);
+  --shadow: 0 1px 2px rgba(34, 29, 25, 0.06), 0 8px 24px rgba(34, 29, 25, 0.08);
+
+  /* --- type --- */
+  --font-serif: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-ui:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* fluid modular scale (~1.2 mobile, ~1.25 desktop), base ~17px */
+  --step--1: clamp(0.87rem, 0.84rem + 0.15vw, 0.95rem);
+  --step-0: clamp(1.0625rem, 1.03rem + 0.18vw, 1.15rem);
+  --step-1: clamp(1.27rem, 1.2rem + 0.36vw, 1.5rem);
+  --step-2: clamp(1.52rem, 1.38rem + 0.7vw, 1.95rem);
+  --step-3: clamp(1.83rem, 1.6rem + 1.15vw, 2.55rem);
+  --step-4: clamp(2.2rem, 1.83rem + 1.83vw, 3.3rem);
+  --step-5: clamp(2.63rem, 2.05rem + 2.9vw, 4.3rem);
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.32;
+  --leading-normal: 1.62;
+  --leading-loose: 1.85;
+
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;
+
+  /* --- space (rem-based, roughly 1.5 ratio) --- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2.25rem;
+  --space-xl: 3.5rem;
+  --space-2xl: 5.5rem;
+  --space-3xl: 8rem;
+
+  /* --- layout --- */
+  --measure: 63ch; /* prose line length */
+  --content-width: 44rem; /* default column */
+  --wide-width: 72rem; /* wide sections */
+  --radius: 6px;
+  --radius-lg: 12px;
+  --header-h: 4rem;
+
+  --transition: 180ms ease;
+
+  color-scheme: light;
+}
+
+/* dark — system preference, only when the user has not forced light */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #15120f;
+    --surface: #1e1a15;
+    --surface-2: #26211a;
+    --ink: #ece4d7;
+    --ink-soft: #b2a593;
+    --ink-faint: #7c7160;
+    --accent: #e07d52;
+    --accent-ink: #ec9067;
+    --accent-soft: rgba(224, 125, 82, 0.16);
+    --line: rgba(236, 228, 215, 0.14);
+    --line-strong: rgba(236, 228, 215, 0.28);
+    --selection: rgba(224, 125, 82, 0.28);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+
+/* dark — explicit toggle, wins in both directions */
+:root[data-theme='dark'] {
+  --bg: #15120f;
+  --surface: #1e1a15;
+  --surface-2: #26211a;
+  --ink: #ece4d7;
+  --ink-soft: #b2a593;
+  --ink-faint: #7c7160;
+  --accent: #e07d52;
+  --accent-ink: #ec9067;
+  --accent-soft: rgba(224, 125, 82, 0.16);
+  --line: rgba(236, 228, 215, 0.14);
+  --line-strong: rgba(236, 228, 215, 0.28);
+  --selection: rgba(224, 125, 82, 0.28);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
