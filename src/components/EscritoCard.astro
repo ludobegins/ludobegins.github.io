@@ -7,6 +7,7 @@ import {
   getSlug,
   displayTitle,
   firstLine,
+  hasDistinctTitle,
   type Escrito,
 } from '../lib/escritos';
 
@@ -16,8 +17,7 @@ interface Props {
 }
 const { entry, locale } = Astro.props;
 const title = displayTitle(entry);
-const hasTitle = Boolean(entry.data.title?.trim());
-const sub = hasTitle ? firstLine(entry) : null;
+const sub = hasDistinctTitle(entry) ? firstLine(entry) : null;
 ---
 
 <a class="card" href={localeUrl(locale, `escritos/${getSlug(entry)}`)}>

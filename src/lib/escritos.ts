@@ -54,6 +54,18 @@ export function displayTitle(entry: Escrito): string {
   return entry.data.title?.trim() || firstLine(entry);
 }
 
+const stripEnd = (s: string) =>
+  s
+    .trim()
+    .toLowerCase()
+    .replace(/[.,;:!?]+$/, '');
+
+/** True when there is an explicit title that says more than the opening line. */
+export function hasDistinctTitle(entry: Escrito): boolean {
+  const title = entry.data.title?.trim();
+  return Boolean(title) && stripEnd(title!) !== stripEnd(firstLine(entry));
+}
+
 /** Short teaser for cards and RSS. */
 export function excerpt(entry: Escrito, maxLen = 140): string {
   if (entry.data.resumo) return entry.data.resumo;

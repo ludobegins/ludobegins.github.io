@@ -2,7 +2,14 @@
 import Base from './Base.astro';
 import { type Locale } from '../i18n/ui';
 import { t, localeUrl } from '../i18n/utils';
-import { tipoLabel, formatFullDate, displayTitle, excerpt, type Escrito } from '../lib/escritos';
+import {
+  tipoLabel,
+  formatFullDate,
+  displayTitle,
+  hasDistinctTitle,
+  excerpt,
+  type Escrito,
+} from '../lib/escritos';
 
 interface Props {
   entry: Escrito;
@@ -13,8 +20,11 @@ const { data } = entry;
 const strings = t(locale).escritos;
 
 const title = displayTitle(entry);
-const hasTitle = Boolean(data.title?.trim());
 const isVerse = data.tipo === 'poesia';
+
+// Show a visible heading only when the title adds something the poem's opening
+// line doesn't already say (so a poem titled by its own first line isn't printed twice).
+const showTitle = hasDistinctTitle(entry);
 ---
 
 <Base title={title} description={data.resumo ?? excerpt(entry)}>
@@ -36,7 +46,7 @@ const isVerse = data.tipo === 'poesia';
         }
       </p>
       {
-        hasTitle ? (
+        showTitle ? (
           <h1 class="escrito__title">{title}</h1>
         ) : (
           <h1 class="visually-hidden">{title}</h1>

@@ -1,4 +1,5 @@
 ---
+title: O gato laranja
 date: 2025-10-15
 tipo: poesia
 tags: [viagem]

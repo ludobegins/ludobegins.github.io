@@ -83,7 +83,7 @@ const pt: Dict = {
       'Site pessoal de Ludovic Beghin — engenheiro de software, poemas e uma viagem de bicicleta.',
     eyebrow: 'Site pessoal & caderno',
     heroLine:
-      'Engenheiro de software. Escrevo poemas — e, de vez em quando, prosa. Em 2025 saí de Natal e fui de bicicleta até a Venezuela.',
+      'Engenheiro de software. Escrevo umas coisas. Em 2025 saí de Natal e fui de bicicleta até a Colômbia.',
     doors: [
       {
         label: 'Sobre',
@@ -144,9 +144,9 @@ const pt: Dict = {
   },
   viagem: {
     title: 'Viagem',
-    metaDescription: 'Mapa 3D da travessia de bicicleta de Ludovic Beghin, de Natal à Venezuela.',
+    metaDescription: 'Mapa 3D da travessia de bicicleta de Ludovic Beghin, de Natal à Colômbia.',
     eyebrow: 'Viagem',
-    heading: 'De Natal à Venezuela, de bicicleta',
+    heading: 'De Natal à Colômbia, de bicicleta',
     lead: 'Oito meses, milhares de quilômetros, um caderno de anotações. Estou reconstruindo o mapa em 3D aqui — com voo de câmera pela rota, fotos do caminho e um modo de exploração livre.',
     stillHtml:
       'Enquanto isso, a primeira versão vive em <a href="https://ludobegins.github.io/por-ai/" target="_blank" rel="noopener noreferrer">ludobegins.github.io/por-ai</a>.',
@@ -177,7 +177,7 @@ const en: Dict = {
       "Ludovic Beghin's personal site — software engineer, poems, and a bicycle journey.",
     eyebrow: 'Personal site & notebook',
     heroLine:
-      'Software engineer. I write poems — and, now and then, prose. In 2025 I left Natal and rode a bicycle to Venezuela.',
+      'Software engineer. I write things. In 2025 I left Natal and rode a bicycle to Colombia.',
     doors: [
       {
         label: 'About',
@@ -238,9 +238,9 @@ const en: Dict = {
   },
   viagem: {
     title: 'Journey',
-    metaDescription: "3D map of Ludovic Beghin's bicycle crossing, from Natal to Venezuela.",
+    metaDescription: "3D map of Ludovic Beghin's bicycle crossing, from Natal to Colombia.",
     eyebrow: 'Journey',
-    heading: 'From Natal to Venezuela, by bicycle',
+    heading: 'From Natal to Colombia, by bicycle',
     lead: "Eight months, thousands of kilometres, a notebook. I'm rebuilding the map in 3D here — with a camera flying along the route, photos from the road, and a free-explore mode.",
     stillHtml:
       'In the meantime, the first version lives at <a href="https://ludobegins.github.io/por-ai/" target="_blank" rel="noopener noreferrer">ludobegins.github.io/por-ai</a>.',
