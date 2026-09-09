@@ -22,6 +22,7 @@ type Dict = {
   home: {
     metaDescription: string;
     eyebrow: string;
+    title: string;
     heroLine: string;
     doors: { label: string; text: string; path: string }[];
     latestTitle: string;
@@ -56,6 +57,30 @@ type Dict = {
     heading: string;
     lead: string;
     stillHtml: string;
+    map: {
+      hint: string;
+      loading: string;
+      fallback: string;
+      chapters: string;
+      whole: string;
+      legKm: string;
+      legClimb: string;
+    };
+    statsTitle: string;
+    stats: {
+      distance: string;
+      daysRiding: string;
+      daysTotal: string;
+      daysRest: string;
+      elevGain: string;
+      highest: string;
+      biggestDay: string;
+      biggestClimb: string;
+      avgPerDay: string;
+      legs: string;
+      movingTime: string;
+      countries: string;
+    };
   };
   notFound: {
     title: string;
@@ -82,6 +107,7 @@ const pt: Dict = {
     metaDescription:
       'Site pessoal de Ludovic Beghin — engenheiro de software, poemas e uma viagem de bicicleta.',
     eyebrow: 'Site pessoal & caderno',
+    title: 'Oi! Sou o Ludovic.',
     heroLine:
       'Engenheiro de software. Escrevo umas coisas. Em 2025 saí de Natal e fui de bicicleta até a Colômbia.',
     doors: [
@@ -147,9 +173,33 @@ const pt: Dict = {
     metaDescription: 'Mapa 3D da travessia de bicicleta de Ludovic Beghin, de Natal à Colômbia.',
     eyebrow: 'Viagem',
     heading: 'De Natal à Colômbia, de bicicleta',
-    lead: 'Oito meses, milhares de quilômetros, um caderno de anotações. Estou reconstruindo o mapa em 3D aqui — com voo de câmera pela rota, fotos do caminho e um modo de exploração livre.',
+    lead: 'Oito meses, milhares de quilômetros, um caderno de anotações. Abaixo, a rota real em 3D — arraste pra girar, aproxime, clique num trecho pra ver o dia. Fotos e narrativa por capítulo vêm depois.',
     stillHtml:
-      'Enquanto isso, a primeira versão vive em <a href="https://ludobegins.github.io/por-ai/" target="_blank" rel="noopener noreferrer">ludobegins.github.io/por-ai</a>.',
+      'A primeira versão da viagem, com as anotações do caminho, vive em <a href="https://ludobegins.github.io/por-ai/" target="_blank" rel="noopener noreferrer">ludobegins.github.io/por-ai</a>.',
+    map: {
+      hint: 'Clique num trecho pra ver o dia. Arraste pra girar, role pra aproximar.',
+      loading: 'Carregando o mapa…',
+      fallback: 'O mapa interativo precisa de JavaScript. Os números abaixo continuam valendo.',
+      chapters: 'Capítulos',
+      whole: 'Rota inteira',
+      legKm: 'km',
+      legClimb: 'subida',
+    },
+    statsTitle: 'Os números',
+    stats: {
+      distance: 'Distância de bike',
+      daysRiding: 'Dias pedalando',
+      daysTotal: 'Dias de viagem',
+      daysRest: 'Dias de descanso',
+      elevGain: 'Subida acumulada',
+      highest: 'Ponto mais alto',
+      biggestDay: 'Maior dia',
+      biggestClimb: 'Maior subida num dia',
+      avgPerDay: 'Média por dia pedalado',
+      legs: 'Pernas',
+      movingTime: 'Tempo em movimento',
+      countries: 'Países',
+    },
   },
   notFound: {
     title: 'Página não encontrada',
@@ -176,6 +226,7 @@ const en: Dict = {
     metaDescription:
       "Ludovic Beghin's personal site — software engineer, poems, and a bicycle journey.",
     eyebrow: 'Personal site & notebook',
+    title: "Hi! I'm Ludovic.",
     heroLine:
       'Software engineer. I write things. In 2025 I left Natal and rode a bicycle to Colombia.',
     doors: [
@@ -241,9 +292,33 @@ const en: Dict = {
     metaDescription: "3D map of Ludovic Beghin's bicycle crossing, from Natal to Colombia.",
     eyebrow: 'Journey',
     heading: 'From Natal to Colombia, by bicycle',
-    lead: "Eight months, thousands of kilometres, a notebook. I'm rebuilding the map in 3D here — with a camera flying along the route, photos from the road, and a free-explore mode.",
+    lead: 'Eight months, thousands of kilometres, a notebook. Below, the real route in 3D — drag to rotate, zoom in, click a leg to see that day. Photos and a chapter-by-chapter story come later.',
     stillHtml:
-      'In the meantime, the first version lives at <a href="https://ludobegins.github.io/por-ai/" target="_blank" rel="noopener noreferrer">ludobegins.github.io/por-ai</a>.',
+      'The first version of the trip, with notes from the road, lives at <a href="https://ludobegins.github.io/por-ai/" target="_blank" rel="noopener noreferrer">ludobegins.github.io/por-ai</a>.',
+    map: {
+      hint: 'Click a leg to see that day. Drag to rotate, scroll to zoom.',
+      loading: 'Loading the map…',
+      fallback: 'The interactive map needs JavaScript. The numbers below still stand.',
+      chapters: 'Chapters',
+      whole: 'Whole route',
+      legKm: 'km',
+      legClimb: 'climb',
+    },
+    statsTitle: 'The numbers',
+    stats: {
+      distance: 'Distance by bike',
+      daysRiding: 'Days riding',
+      daysTotal: 'Days on the trip',
+      daysRest: 'Rest days',
+      elevGain: 'Total climb',
+      highest: 'Highest point',
+      biggestDay: 'Biggest day',
+      biggestClimb: 'Biggest climb in a day',
+      avgPerDay: 'Average per riding day',
+      legs: 'Legs',
+      movingTime: 'Moving time',
+      countries: 'Countries',
+    },
   },
   notFound: {
     title: 'Page not found',

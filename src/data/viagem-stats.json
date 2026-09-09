@@ -1,0 +1,124 @@
+{
+  "generated": "2026-09-09",
+  "source": "Strava account export",
+  "window": {
+    "start": "2025-09-17",
+    "end": "2026-05-23"
+  },
+  "date_start": "2025-09-17",
+  "date_end": "2026-05-21",
+  "days_total": 247,
+  "days_riding": 140,
+  "days_rest": 107,
+  "countries": 3,
+  "activities": 150,
+  "activities_without_track": 1,
+  "distance_km": 7844,
+  "elev_gain_m": 53730,
+  "highest_point_m": 2432,
+  "highest_point_date": "2026-05-12",
+  "moving_time_s": 1866634,
+  "moving_time_h": 518.5,
+  "avg_km_per_riding_day": 56,
+  "biggest_day": {
+    "date": "2025-12-19",
+    "distance_km": 125.3
+  },
+  "biggest_climb": {
+    "date": "2026-05-14",
+    "elev_gain_m": 1636
+  },
+  "chapters": [
+    {
+      "n": 1,
+      "slug": "nordeste",
+      "title_pt": "Nordeste",
+      "title_en": "Northeast",
+      "country": "BR",
+      "date_start": "2025-09-17",
+      "date_end": "2025-10-27",
+      "days_riding": 33,
+      "activities": 34,
+      "distance_km": 2056.1,
+      "elev_gain_m": 10557
+    },
+    {
+      "n": 2,
+      "slug": "amazonia",
+      "title_pt": "Amazônia",
+      "title_en": "Amazon",
+      "country": "BR",
+      "date_start": "2025-10-28",
+      "date_end": "2026-01-12",
+      "days_riding": 32,
+      "activities": 34,
+      "distance_km": 1721.7,
+      "elev_gain_m": 11804
+    },
+    {
+      "n": 3,
+      "slug": "gran-sabana-leste",
+      "title_pt": "Gran Sabana e Leste",
+      "title_en": "Gran Sabana & the East",
+      "country": "VE",
+      "date_start": "2026-01-14",
+      "date_end": "2026-02-21",
+      "days_riding": 22,
+      "activities": 23,
+      "distance_km": 1214.8,
+      "elev_gain_m": 10885
+    },
+    {
+      "n": 4,
+      "slug": "costa-caribenha",
+      "title_pt": "Costa caribenha",
+      "title_en": "Caribbean coast",
+      "country": "VE",
+      "date_start": "2026-02-23",
+      "date_end": "2026-03-22",
+      "days_riding": 19,
+      "activities": 22,
+      "distance_km": 781.2,
+      "elev_gain_m": 6198
+    },
+    {
+      "n": 5,
+      "slug": "oeste",
+      "title_pt": "Oeste",
+      "title_en": "The West",
+      "country": "VE",
+      "date_start": "2026-03-23",
+      "date_end": "2026-04-12",
+      "days_riding": 14,
+      "activities": 15,
+      "distance_km": 924.2,
+      "elev_gain_m": 5244
+    },
+    {
+      "n": 6,
+      "slug": "caribe-colombiano",
+      "title_pt": "Caribe colombiano",
+      "title_en": "Colombian Caribbean",
+      "country": "CO",
+      "date_start": "2026-04-13",
+      "date_end": "2026-05-06",
+      "days_riding": 10,
+      "activities": 12,
+      "distance_km": 606.7,
+      "elev_gain_m": 2456
+    },
+    {
+      "n": 7,
+      "slug": "eje-cafetero",
+      "title_pt": "Eje cafetero",
+      "title_en": "Coffee region",
+      "country": "CO",
+      "date_start": "2026-05-07",
+      "date_end": "2026-05-21",
+      "days_riding": 10,
+      "activities": 10,
+      "distance_km": 539,
+      "elev_gain_m": 6586
+    }
+  ]
+}

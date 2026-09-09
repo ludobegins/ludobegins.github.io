@@ -1,0 +1,107 @@
+---
+import { type Locale } from '../../i18n/ui';
+import { t } from '../../i18n/utils';
+import { tripStats as v, fmtInt, fmtDate } from '../../lib/viagem';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const s = t(locale).viagem;
+const n = (x: number) => fmtInt(x, locale);
+
+type Tile = { label: string; value: string; sub?: string };
+const tiles: Tile[] = [
+  { label: s.stats.distance, value: `${n(v.distance_km)} km` },
+  { label: s.stats.daysRiding, value: n(v.days_riding) },
+  { label: s.stats.daysTotal, value: n(v.days_total) },
+  { label: s.stats.daysRest, value: n(v.days_rest) },
+  { label: s.stats.elevGain, value: `${n(v.elev_gain_m)} m` },
+  {
+    label: s.stats.highest,
+    value: `${n(v.highest_point_m)} m`,
+    sub: fmtDate(v.highest_point_date, locale),
+  },
+  {
+    label: s.stats.biggestDay,
+    value: `${n(v.biggest_day.distance_km)} km`,
+    sub: fmtDate(v.biggest_day.date, locale),
+  },
+  {
+    label: s.stats.biggestClimb,
+    value: `${n(v.biggest_climb.elev_gain_m)} m`,
+    sub: fmtDate(v.biggest_climb.date, locale),
+  },
+  { label: s.stats.avgPerDay, value: `${n(v.avg_km_per_riding_day)} km` },
+  { label: s.stats.movingTime, value: `${n(v.moving_time_h)} h` },
+  { label: s.stats.legs, value: n(v.activities) },
+  { label: s.stats.countries, value: n(v.countries) },
+];
+---
+
+<section class="stats-panel" aria-labelledby="stats-title">
+  <h2 id="stats-title">{s.statsTitle}</h2>
+  <ul class="stats" role="list">
+    {
+      tiles.map((tile) => (
+        <li class="stat">
+          <span class="stat__value">{tile.value}</span>
+          <span class="stat__label">{tile.label}</span>
+          {tile.sub && <span class="stat__sub">{tile.sub}</span>}
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .stats-panel {
+    --flow-space: var(--space-m);
+  }
+
+  .stats-panel h2 {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    margin-bottom: var(--space-s);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: var(--space-s) var(--space-s) calc(var(--space-s) + 0.1rem);
+    background: var(--bg);
+  }
+
+  .stat__value {
+    font-size: var(--step-2);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat__label {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    line-height: var(--leading-snug);
+  }
+
+  .stat__sub {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+</style>

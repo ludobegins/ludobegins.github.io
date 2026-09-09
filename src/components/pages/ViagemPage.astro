@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import TripMap from '../viagem/TripMap.astro';
+import StatsPanel from '../viagem/StatsPanel.astro';
 import { type Locale } from '../../i18n/ui';
 import { t } from '../../i18n/utils';
 
@@ -11,23 +13,43 @@ const s = t(locale).viagem;
 ---
 
 <Base title={s.title} description={s.metaDescription}>
-  <section class="page wrap wrap--prose flow">
-    <p class="eyebrow">{s.eyebrow}</p>
-    <h1>{s.heading}</h1>
-    <p class="lead">{s.lead}</p>
-    <p set:html={s.stillHtml} />
-  </section>
+  <div class="viagem wrap wrap--wide flow">
+    <header class="viagem__intro flow">
+      <p class="eyebrow">{s.eyebrow}</p>
+      <h1>{s.heading}</h1>
+      <p class="lead">{s.lead}</p>
+    </header>
+
+    <TripMap locale={locale} />
+
+    <StatsPanel locale={locale} />
+
+    <p class="viagem__still" set:html={s.stillHtml} />
+  </div>
 </Base>
 
 <style>
-  .page {
+  .viagem {
     padding-top: var(--space-xl);
-    --flow-space: var(--space-m);
+    padding-bottom: var(--space-2xl);
+    --flow-space: var(--space-xl);
   }
+
+  .viagem__intro {
+    --flow-space: var(--space-s);
+    max-width: var(--measure);
+  }
+
   .lead {
     font-size: var(--step-1);
     color: var(--ink-soft);
     line-height: var(--leading-snug);
-    max-width: 46ch;
+    max-width: 48ch;
+  }
+
+  .viagem__still {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
   }
 </style>

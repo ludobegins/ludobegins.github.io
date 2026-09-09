@@ -62,15 +62,40 @@ linhas retas entre pontos do `por-ai`.
 
 - Fonte: **export completo do Strava** (Configurações → Minha conta → _Baixar ou
   excluir sua conta_ → pedir o arquivo). Chega por e-mail um ZIP com um GPX por
-  atividade + `activities.csv` com os resumos. Sem API, sem token. O ZIP entra no
-  repo como fonte, fora do git (`/strava-export/`, no `.gitignore`).
-- Script local (Node) lê os GPX + o CSV e gera:
-  - `public/viagem/rota.geojson` — o traçado real, simplificado (Douglas–Peucker)
-    pra não pesar, uma feature `LineString` por perna, com `transport`
-    (bicycle | boat | truck), `date`, `distance_km`, `elev_gain_m`, `chapter`.
-  - `src/data/viagem-stats.json` — os números (abaixo), calculados uma vez.
-- 1 atividade do Strava ≈ 1 perna/dia. As pernas são agrupadas em **~7 capítulos
-  por região** (RN → CE → PI/MA → PA → AM → RR → Colômbia) para o scrollytelling.
+  atividade + `activities.csv` com os resumos. Sem API, sem token. O ZIP está no
+  repo como fonte, fora do git: `strava-export/export_38598547.zip`
+  (a pasta `strava-export/` já está no `.gitignore`).
+- É a **conta inteira** (301 atividades desde 2018). O script filtra:
+  - **janela da viagem** — `Data da atividade` entre **2025-09-17 e 2026-05-23**
+    (≈163 atividades). Obs.: as colunas do `activities.csv` vêm em português
+    (`Tipo de atividade`, `Data da atividade`, `Nome do arquivo`…) e a data no
+    formato `8 de set. de 2026, 06:47:55`.
+  - **só bike** — manter `Tipo de atividade == Pedalada` (≈150). As 13 `Trilha`/
+    `Caminhada` da janela são passeios a pé no destino (Tayrona, Minca, cachoeiras
+    da Gran Sabana, Medellín) — fora do traçado; podem virar pontos depois.
+- Script local (Node): `scripts/build-viagem.mjs` (`npm run viagem`). Lê
+  `strava-export/activities.csv` + `strava-export/activities/*.gpx` (extrair o ZIP
+  nessa pasta antes — tudo gitignorado) e gera dois arquivos:
+  - `public/viagem/rota.geojson` — o traçado real, simplificado (Douglas–Peucker,
+    tolerância no topo do script) pra não pesar (~430 kB, 1 feature `LineString`
+    por perna). Props: `date`, `name`, `chapter`, `chapter_slug`, `country`,
+    `transport` (bicycle — barco/caminhão entram à mão depois), `distance_km`,
+    `elev_gain_m`, `moving_time_s`.
+  - `src/data/viagem-stats.json` — os números (abaixo) + um bloco por capítulo,
+    calculados uma vez.
+- 1 atividade do Strava ≈ 1 perna/dia. As pernas caem em **7 capítulos por data**
+  (const `CHAPTERS` no topo do script). Cortes definidos pelo autor (a bater com
+  os waypoints):
+  - Brasil: **1. Nordeste** (17/09 → 27/10, litoral RN/CE, termina ao entrar no
+    Pará) · **2. Amazônia** (28/10 → fronteira 14/01: Belém, a balsa, Santarém, o
+    rio, Manaus → BR-174 → Boa Vista → Pacaraima).
+  - Venezuela: **3. Gran Sabana e Leste** (14/01 → 21/02: Santa Elena, tepuis,
+    quedas → Ciudad Guayana, Maturín, até a costa) · **4. Costa caribenha**
+    (→ 22/03: Isla Margarita, Puerto La Cruz, Caracas) · **5. Oeste** (23/03 →
+    fronteira 12/04: Morón, Coro).
+  - Colômbia: **6. Caribe colombiano** (13/04 → 06/05: Santa Marta, Minca,
+    Tayrona) · **7. Eje cafetero** (07/05 → 21/05: a subida pra serra, Medellín e
+    a zona cafeeira).
 - Sem cortar início/fim dos tracks (privacidade ok segundo o autor).
 - Transfers de barco/caminhão: não têm GPS — linha reta tracejada, contados à parte.
 
@@ -92,7 +117,8 @@ narrativa, por cima do traçado. `public/viagem/pontos.geojson`, completado à m
 - tempo total em movimento
 - manuais, se houver dado: furos de pneu, noites acampado…
 
-**Fotos.** Agrupar os ~40 pontos em ~7 capítulos; ~7–10 fotos-herói para o
+**Fotos.** Agrupar os ~40 pontos nos 7 capítulos (2 Brasil · 3 Venezuela · 2
+Colômbia); ~7–10 fotos-herói para o
 lançamento. `public/fotos/viagem/<id>.jpg`; script `sharp` gera tamanhos
 responsivos + placeholder. Fotos dos demais pontos entram aos poucos.
 
@@ -105,11 +131,19 @@ responsivos + placeholder. Fotos dos demais pontos entram aos poucos.
       tipo e de tag, RSS, "últimos escritos" na home. 3 poemas reais semeados
       (datas a ajustar). Falta: layout de prosa dedicado se surgir texto longo;
       navegação anterior/próximo entre textos.
-- [ ] **Fase 3 — Viagem.** Script Strava export → `rota.geojson` + `viagem-stats.json`.
-      Completar `pontos.geojson` à mão. MapLibre + terreno 3D, modo explorar
-      (clica no ponto → nota/data/km, filtro por transporte), depois camada de
-      scrollytelling por capítulo e painel de números. Fallback estático + OG.
-      **Pendências do autor:** pedir o export do Strava; completar os pontos/notas.
+- [ ] **Fase 3 — Viagem.** _Primeira versão no ar; falta scrollytelling +
+      pontos._ Feito: `scripts/build-viagem.mjs` (Strava → `public/viagem/rota.geojson` + `src/data/viagem-stats.json`, `npm run viagem`); `scripts/build-paises.mjs`
+      → `public/viagem/paises.geojson` (contornos Natural Earth 50m, `npm run paises`);
+      `/viagem` reconstruída — ilha MapLibre (`src/components/viagem/TripMap.astro`)
+      com relevo (hillshade + terreno 3D, DEM terrarium Tilezen/AWS, sem token)
+      sobre o kraft, contornos de país, rota colorida por capítulo, legenda que voa
+      a câmera pro capítulo, popup por perna, tema claro/escuro; painel de números
+      server-side (`StatsPanel.astro`); `<noscript>` + estado de erro com fallback
+      pro por-ai. Falta: modo explorar (filtro por transporte, depende dos transfers
+      à mão), `pontos.geojson` (os ~40 waypoints), scrollytelling por capítulo
+      (precisa dos textos + fotos), fallback como imagem + OG (Fase 4).
+      **Pendências do autor:** conferir os limites de capítulo (`CHAPTERS` em
+      `scripts/build-viagem.mjs`) com os waypoints; completar os pontos/notas.
 - [ ] **Fase 4 — Acabamento.** OG images, SEO/meta, view transitions, passada de
       performance e acessibilidade, favicon próprio, deploy via GitHub Actions.
 
