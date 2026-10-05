@@ -147,6 +147,11 @@ const pt: Dict = {
         href: 'https://github.com/ludobegins/por-ai',
       },
       {
+        name: 'PPT do Flávio',
+        text: 'Mapa de conexões criminosas do candidato à presidência.',
+        href: 'https://pptdoflavio.com.br/',
+      },
+      {
         name: 'Este site',
         text: 'Feito em Astro, sem backend. Código aberto no GitHub.',
         href: 'https://github.com/ludobegins/ludobegins.github.io',
@@ -264,6 +269,11 @@ const en: Dict = {
         name: 'por-ai',
         text: 'Interactive 3D map of a bicycle crossing of Brazil, with waypoints and notes from the road.',
         href: 'https://github.com/ludobegins/por-ai',
+      },
+      {
+        name: 'PPT do Flávio',
+        text: 'Map of the criminal connections of the presidential candidate.',
+        href: 'https://pptdoflavio.com.br/',
       },
       {
         name: 'This site',
