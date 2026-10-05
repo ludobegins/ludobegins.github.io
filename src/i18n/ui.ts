@@ -137,7 +137,7 @@ const pt: Dict = {
     eyebrow: 'Sobre',
     bioHtml: [
       'Engenheiro de formação, gosto de quebrar a cabeça pra resolver problemas difíceis — é o que eu acho mais legal na programação. Tenho ~4 anos de experiência full-stack, principalmente com Python, Angular e AWS.',
-      'Agora, como todos na área, me adaptando à nova era pré-distópica "spec-driven", implorando tokens aos nossos novos lordes tecnofeudais. Mas também curtindo que dá pra fazer um site bonitinho com baixo esforço (sem saudades de mexer em CSS). Na área de programação, sou fã do <a href="https://tiangolo.com/" target="_blank" rel="noopener noreferrer">tiangolo</a>.',
+      'Agora, como (quase) todos na área, me adaptando à nova era pré-distópica "spec-driven", implorando tokens aos nossos novos lordes tecnofeudais. Mas também curtindo que dá pra fazer um site bonitinho com baixo esforço (sem saudades de mexer em CSS). Na área de programação, sou fã do <a href="https://tiangolo.com/" target="_blank" rel="noopener noreferrer">tiangolo</a>.',
       'Fora do trabalho, gosto de praia, esportes, tocar gaita e passar tempo com as pessoas que amo.',
       'Meus valores: amizade, curiosidade, natureza, humildade, empatia.',
     ],
@@ -262,7 +262,7 @@ const en: Dict = {
     eyebrow: 'About',
     bioHtml: [
       "Engineer by training, I like racking my brain over hard problems — that's what I enjoy most about programming. I have ~4 years of full-stack experience, mostly with Python, Angular and AWS.",
-      'Right now, like everyone in the field, adapting to the new pre-dystopian "spec-driven" era, begging our new technofeudal overlords for tokens. But also enjoying that you can build a nice little site with low effort (not missing fiddling with CSS). In the programming world, I\'m a fan of <a href="https://tiangolo.com/" target="_blank" rel="noopener noreferrer">tiangolo</a>.',
+      'Right now, like (almost) everyone in the field, adapting to the new pre-dystopian "spec-driven" era, begging our new technofeudal overlords for tokens. But also enjoying that you can build a nice little site with low effort (not missing fiddling with CSS). In the programming world, I\'m a fan of <a href="https://tiangolo.com/" target="_blank" rel="noopener noreferrer">tiangolo</a>.',
       'Outside of work, I like the beach, sports, playing harmonica and spending time with the people I love.',
       'My values: friendship, curiosity, nature, humility, empathy.',
     ],
