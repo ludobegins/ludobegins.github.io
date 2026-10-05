@@ -58,12 +58,6 @@ const altHref = new URL(alt.url, Astro.site).href;
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" href={href('/favicon.ico')} sizes="any" />
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={`${site.name} — Escritos`}
-      href={href('/rss.xml')}
-    />
     <meta name="theme-color" content="#f4ead6" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#191308" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />

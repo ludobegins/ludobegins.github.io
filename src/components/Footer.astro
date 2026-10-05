@@ -1,6 +1,5 @@
 ---
 import { site } from '../site.config';
-import { href } from '../lib/href';
 import SocialLinks from './SocialLinks.astro';
 
 const year = new Date().getFullYear();
@@ -12,7 +11,7 @@ const year = new Date().getFullYear();
       © {year}
       {site.name}
     </p>
-    <SocialLinks rss={href('/rss.xml')} size={18} />
+    <SocialLinks size={18} />
   </div>
 </footer>
 

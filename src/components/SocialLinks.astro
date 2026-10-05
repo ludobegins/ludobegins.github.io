@@ -3,12 +3,10 @@ import { socials } from '../site.config';
 import Icon from './Icon.astro';
 
 interface Props {
-  /** include an RSS link pointing at this path */
-  rss?: string;
   size?: number;
   class?: string;
 }
-const { rss, size = 20, class: className } = Astro.props;
+const { size = 20, class: className } = Astro.props;
 ---
 
 <ul class={`social ${className ?? ''}`}>
@@ -20,15 +18,6 @@ const { rss, size = 20, class: className } = Astro.props;
         </a>
       </li>
     ))
-  }
-  {
-    rss && (
-      <li>
-        <a href={rss} aria-label="RSS">
-          <Icon name="rss" size={size} />
-        </a>
-      </li>
-    )
   }
 </ul>
 

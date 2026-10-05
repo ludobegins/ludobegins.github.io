@@ -1,5 +1,5 @@
 export const site = {
-  /** Everyday name — <title>, footer, OG, RSS. Matches other platforms. */
+  /** Everyday name — <title>, footer, OG. Matches other platforms. */
   name: 'Ludovic Beghin',
   /** Full name with the Brazilian surname — used only on the Sobre/About page. */
   fullName: 'Ludovic de Souza',
@@ -9,7 +9,7 @@ export const site = {
   email: 'ludo.beghin@gmail.com',
 } as const;
 
-export const socials: { label: string; href: string; icon: 'github' | 'linkedin' | 'rss' }[] = [
+export const socials: { label: string; href: string; icon: 'github' | 'linkedin' }[] = [
   { label: 'GitHub', href: 'https://github.com/ludobegins', icon: 'github' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ludovic-beghin', icon: 'linkedin' },
 ];

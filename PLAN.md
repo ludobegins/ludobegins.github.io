@@ -33,7 +33,7 @@ e recebem `locale`.
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `/` · `/en/`             | Frase de abertura + 3 "portas" (Sobre / Escritos / Viagem) + links + últimos escritos.                                                                 |
 | `/sobre` · `/en/sobre`   | Versão enxuta, PT e EN.                                                                                                                                |
-| `/escritos` · `/en/...`  | Lista filtrável por `tipo`; `/escritos/:slug`; `/escritos/tipo/:tipo`; `/escritos/tag/:tag`; `rss.xml` (feed PT). Corpo dos poemas sempre no original. |
+| `/escritos` · `/en/...`  | Lista filtrável por `tipo`; `/escritos/:slug`; `/escritos/tipo/:tipo`; `/escritos/tag/:tag`. Corpo dos poemas sempre no original. |
 | `/viagem` · `/en/viagem` | Scrollytelling por capítulo → modo explorar + painel de números.                                                                                       |
 
 ### Modelo dos escritos (Markdown + frontmatter)
@@ -128,7 +128,7 @@ responsivos + placeholder. Fotos dos demais pontos entram aos poucos.
       dark mode, header/footer, deploy config. Páginas `/`, `/sobre`, `/about`, 404. Stubs de `/escritos` e `/viagem`.
 - [x] **Fase 2 — Escritos.** Content collection + schema (`poesia` | `pensamentos`),
       listagem com filtro por tipo, layout de verso (remark-breaks), páginas de
-      tipo e de tag, RSS, "últimos escritos" na home. 3 poemas reais semeados
+      tipo e de tag, "últimos escritos" na home. 3 poemas reais semeados
       (datas a ajustar). Falta: layout de prosa dedicado se surgir texto longo;
       navegação anterior/próximo entre textos.
 - [ ] **Fase 3 — Viagem.** _Primeira versão no ar; falta scrollytelling +

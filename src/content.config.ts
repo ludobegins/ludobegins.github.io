@@ -14,7 +14,7 @@ const escritos = defineCollection({
     date: z.coerce.date(),
     tipo: z.enum(['poesia', 'pensamentos']).default('poesia'),
     tags: z.array(z.string()).default([]),
-    /** Resumo para a listagem e o RSS. Sem isso, usa-se o começo do texto. */
+    /** Resumo para a listagem. Sem isso, usa-se o começo do texto. */
     resumo: z.string().optional(),
     draft: z.boolean().default(false),
     /** Sobrescreve o slug derivado do nome do arquivo. */

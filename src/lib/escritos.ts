@@ -66,7 +66,7 @@ export function hasDistinctTitle(entry: Escrito): boolean {
   return Boolean(title) && stripEnd(title!) !== stripEnd(firstLine(entry));
 }
 
-/** Short teaser for cards and RSS. */
+/** Short teaser for cards and meta descriptions. */
 export function excerpt(entry: Escrito, maxLen = 140): string {
   if (entry.data.resumo) return entry.data.resumo;
   const raw = (entry.body ?? '')
