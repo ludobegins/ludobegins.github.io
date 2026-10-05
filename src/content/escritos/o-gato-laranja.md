@@ -11,7 +11,7 @@ Família reunida, motorizada
 Sob o olhar atento das montanhas
 Dessa terra distante
 
-É trágico como é rápido virar tudo di avesso
+É trágico como é rápido virar tudo do avesso
 Entrada errada, rua sem saída
 Gato laranja e sua fama de maluco
 Maluco seria não sentir o peito rachar
