@@ -1,0 +1,187 @@
+---
+import { site } from '../site.config';
+import { localeName, type Locale } from '../i18n/ui';
+import { t, localeUrl, alternateUrl, isActive } from '../i18n/utils';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const strings = t(locale);
+const pathname = Astro.url.pathname;
+
+const items = [
+  { label: strings.nav.sobre, path: 'sobre' },
+  { label: strings.nav.escritos, path: 'escritos' },
+  { label: strings.nav.viagem, path: 'viagem' },
+];
+
+const alt = alternateUrl(pathname, locale);
+const altLabel = alt.locale.toUpperCase();
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="wordmark" href={localeUrl(locale)} aria-label={site.name}>
+      <span class="wordmark__full">{site.wordmark}</span>
+      <span class="wordmark__short" aria-hidden="true">LB</span>
+    </a>
+
+    <nav class="site-nav" aria-label={strings.nav.aria}>
+      {
+        items.map((item) => (
+          <a
+            href={localeUrl(locale, item.path)}
+            class="site-nav__link"
+            aria-current={isActive(pathname, item.path) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="site-header__tools">
+      <a
+        class="lang-toggle"
+        href={alt.url}
+        aria-label={`${strings.langToggleAria}: ${localeName[alt.locale]}`}
+        hreflang={alt.locale}
+      >
+        {altLabel}
+      </a>
+      <ThemeToggle label={strings.themeToggle} />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px) saturate(1.4);
+    -webkit-backdrop-filter: blur(10px) saturate(1.4);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition);
+  }
+
+  .site-header[data-scrolled] {
+    border-bottom-color: var(--line);
+  }
+
+  .site-header__inner {
+    max-width: var(--wide-width);
+    margin-inline: auto;
+    min-height: var(--header-h);
+    padding-inline: var(--space-m);
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+  }
+
+  .wordmark {
+    font-size: var(--step-0);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    text-decoration: none;
+    margin-right: auto;
+    white-space: nowrap;
+  }
+
+  .wordmark:hover {
+    color: var(--ink);
+  }
+
+  .wordmark__short {
+    display: none;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.9rem, 2.5vw, 1.9rem);
+  }
+
+  .site-nav__link {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding-block: 0.4rem;
+    position: relative;
+  }
+
+  .site-nav__link:hover {
+    color: var(--ink);
+  }
+
+  .site-nav__link[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  .site-nav__link[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.1rem;
+    height: 1.5px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .site-header__tools {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .lang-toggle {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius);
+  }
+
+  .lang-toggle:hover {
+    color: var(--ink);
+    background: var(--accent-soft);
+  }
+
+  @media (max-width: 34rem) {
+    .site-header__inner {
+      gap: var(--space-s);
+      padding-inline: var(--space-s);
+    }
+    .site-nav {
+      gap: 0.9rem;
+    }
+    .wordmark__full {
+      display: none;
+    }
+    .wordmark__short {
+      display: inline;
+      font-size: var(--step-0);
+      letter-spacing: 0.02em;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('.site-header');
+  if (header) {
+    const onScroll = () => {
+      if (window.scrollY > 4) header.setAttribute('data-scrolled', '');
+      else header.removeAttribute('data-scrolled');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>

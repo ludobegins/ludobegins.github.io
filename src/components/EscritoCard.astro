@@ -1,0 +1,70 @@
+---
+import { type Locale } from '../i18n/ui';
+import { localeUrl } from '../i18n/utils';
+import {
+  tipoLabel,
+  formatMonthYear,
+  getSlug,
+  displayTitle,
+  firstLine,
+  hasDistinctTitle,
+  type Escrito,
+} from '../lib/escritos';
+
+interface Props {
+  entry: Escrito;
+  locale: Locale;
+}
+const { entry, locale } = Astro.props;
+const title = displayTitle(entry);
+const sub = hasDistinctTitle(entry) ? firstLine(entry) : null;
+---
+
+<a class="card" href={localeUrl(locale, `escritos/${getSlug(entry)}`)}>
+  <span class="card__title">{title}</span>
+  {sub && <span class="card__sub">{sub}</span>}
+  <span class="card__meta">
+    {tipoLabel(entry.data.tipo, locale)}
+    <span aria-hidden="true">·</span>
+    {formatMonthYear(entry.data.date, locale)}
+  </span>
+</a>
+
+<style>
+  .card {
+    display: grid;
+    gap: var(--space-3xs);
+    padding: var(--space-m) 0;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+    transition: border-color var(--transition);
+  }
+
+  .card:hover {
+    border-top-color: var(--accent);
+  }
+
+  .card__title {
+    font-size: var(--step-1);
+    color: var(--ink);
+    line-height: var(--leading-snug);
+  }
+
+  .card:hover .card__title {
+    color: var(--accent-ink);
+  }
+
+  .card__sub {
+    color: var(--ink-soft);
+    font-size: var(--step-0);
+  }
+
+  .card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+</style>

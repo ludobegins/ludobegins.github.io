@@ -1,0 +1,65 @@
+---
+import { type Locale } from '../i18n/ui';
+import { t, localeUrl } from '../i18n/utils';
+import { TIPOS, type Tipo } from '../lib/escritos';
+
+interface Props {
+  locale: Locale;
+  /** which chip is active; undefined = "all" */
+  active?: Tipo;
+}
+const { locale, active } = Astro.props;
+const strings = t(locale).escritos;
+
+const chips: { label: string; path: string; key?: Tipo }[] = [
+  { label: strings.all, path: 'escritos' },
+  ...TIPOS.map((key) => ({ label: strings.tipos[key], path: `escritos/tipo/${key}`, key })),
+];
+---
+
+<nav class="tipo-filter" aria-label={strings.eyebrow}>
+  {
+    chips.map((chip) => (
+      <a
+        href={localeUrl(locale, chip.path)}
+        class="tipo-filter__chip"
+        aria-current={chip.key === active || (!chip.key && !active) ? 'true' : undefined}
+      >
+        {chip.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .tipo-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .tipo-filter__chip {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition:
+      color var(--transition),
+      border-color var(--transition),
+      background-color var(--transition);
+  }
+
+  .tipo-filter__chip:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+
+  .tipo-filter__chip[aria-current='true'] {
+    color: var(--bg);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+</style>

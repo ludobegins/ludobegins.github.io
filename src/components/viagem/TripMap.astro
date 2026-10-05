@@ -1,0 +1,526 @@
+---
+import { type Locale } from '../../i18n/ui';
+import { t } from '../../i18n/utils';
+import { href } from '../../lib/href';
+import { tripStats, chapterColor, chapterTitle, CHAPTER_COLORS } from '../../lib/viagem';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const s = t(locale).viagem;
+
+const chapters = tripStats.chapters.map((c) => ({
+  slug: c.slug,
+  title: chapterTitle(c, locale),
+  color: chapterColor(c.slug),
+}));
+
+const config = {
+  route: href('/viagem/rota.geojson'),
+  paises: href('/viagem/paises.geojson'),
+  colors: CHAPTER_COLORS,
+  locale,
+  labels: { km: s.map.legKm, climb: s.map.legClimb, error: s.map.fallback },
+};
+---
+
+<figure class="tripmap" data-tripmap>
+  <div class="tripmap__chips" role="group" aria-label={s.map.chapters}>
+    <button type="button" class="tripmap__chip is-active" data-chapter="">{s.map.whole}</button>
+    {
+      chapters.map((c) => (
+        <button
+          type="button"
+          class="tripmap__chip"
+          data-chapter={c.slug}
+          style={`--chip: ${c.color}`}
+        >
+          <span class="tripmap__dot" aria-hidden="true" />
+          {c.title}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="tripmap__canvas" id="tripmap-canvas">
+    <p class="tripmap__status" data-status>{s.map.loading}</p>
+  </div>
+
+  <p class="tripmap__hint">{s.map.hint}</p>
+
+  <noscript>
+    <p class="tripmap__fallback" set:html={`${s.map.fallback} ${s.stillHtml}`} />
+  </noscript>
+
+  <script type="application/json" data-tripmap-config set:html={JSON.stringify(config)} />
+</figure>
+
+<script>
+  import * as maplibregl from 'maplibre-gl';
+  import 'maplibre-gl/dist/maplibre-gl.css';
+
+  type Cfg = {
+    route: string;
+    paises: string;
+    colors: Record<string, string>;
+    locale: 'pt' | 'en';
+    labels: { km: string; climb: string; error: string };
+  };
+
+  const DEM_TILES = 'https://elevation-tiles-prod.s3.amazonaws.com/terrarium/{z}/{x}/{y}.png';
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const cssVar = (name: string) =>
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  const isDark = () => {
+    const forced = document.documentElement.dataset.theme;
+    if (forced === 'dark') return true;
+    if (forced === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  };
+
+  const palette = () =>
+    isDark()
+      ? {
+          sea: cssVar('--bg') || '#191308',
+          land: 'rgba(240, 228, 205, 0.05)',
+          border: 'rgba(240, 228, 205, 0.22)',
+          hsShadow: 'rgba(0, 0, 0, 0.55)',
+          hsHighlight: 'rgba(235, 215, 180, 0.10)',
+          hsAccent: 'rgba(0, 0, 0, 0.35)',
+        }
+      : {
+          sea: cssVar('--bg') || '#f4ead6',
+          land: 'rgba(120, 96, 66, 0.16)',
+          border: 'rgba(42, 32, 25, 0.32)',
+          hsShadow: 'rgba(74, 54, 38, 0.38)',
+          hsHighlight: 'rgba(255, 248, 230, 0.30)',
+          hsAccent: 'rgba(74, 54, 38, 0.20)',
+        };
+
+  const esc = (str: string) =>
+    str.replace(
+      /[&<>"]/g,
+      (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string,
+    );
+
+  const ptLocale = {
+    'AttributionControl.ToggleAttribution': 'Créditos',
+    'NavigationControl.ZoomIn': 'Aproximar',
+    'NavigationControl.ZoomOut': 'Afastar',
+    'NavigationControl.ResetBearing': 'Repor a orientação',
+    'CooperativeGesturesHandler.WindowsHelpText': 'Use Ctrl + rolagem para ampliar o mapa',
+    'CooperativeGesturesHandler.MacHelpText': 'Use ⌘ + rolagem para ampliar o mapa',
+    'CooperativeGesturesHandler.MobileHelpText': 'Use dois dedos para mover o mapa',
+  };
+
+  function init(root: HTMLElement, cfg: Cfg) {
+    const statusEl = root.querySelector<HTMLElement>('[data-status]');
+    const setStatus = (text: string | null) => {
+      if (!statusEl) return;
+      if (text === null) {
+        statusEl.hidden = true;
+      } else {
+        statusEl.textContent = text;
+        statusEl.hidden = false;
+      }
+    };
+
+    let pal = palette();
+
+    const map = new maplibregl.Map({
+      container: 'tripmap-canvas',
+      attributionControl: false,
+      cooperativeGestures: true,
+      minZoom: 2,
+      maxPitch: 80,
+      center: [-58, 2],
+      zoom: 3.2,
+      pitch: 40,
+      locale: cfg.locale === 'pt' ? ptLocale : undefined,
+      style: {
+        version: 8,
+        sources: {
+          dem: {
+            type: 'raster-dem',
+            tiles: [DEM_TILES],
+            encoding: 'terrarium',
+            tileSize: 256,
+            maxzoom: 13,
+            attribution:
+              'Relevo: <a href="https://github.com/tilezen/joerd" target="_blank" rel="noopener">Tilezen</a> / AWS',
+          },
+        },
+        layers: [
+          { id: 'sea', type: 'background', paint: { 'background-color': pal.sea } },
+          {
+            id: 'hillshade',
+            type: 'hillshade',
+            source: 'dem',
+            paint: {
+              'hillshade-exaggeration': 0.85,
+              'hillshade-shadow-color': pal.hsShadow,
+              'hillshade-highlight-color': pal.hsHighlight,
+              'hillshade-accent-color': pal.hsAccent,
+            },
+          },
+        ],
+      },
+    });
+
+    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+
+    const applyPalette = () => {
+      pal = palette();
+      map.setPaintProperty('sea', 'background-color', pal.sea);
+      if (map.getLayer('hillshade')) {
+        map.setPaintProperty('hillshade', 'hillshade-shadow-color', pal.hsShadow);
+        map.setPaintProperty('hillshade', 'hillshade-highlight-color', pal.hsHighlight);
+        map.setPaintProperty('hillshade', 'hillshade-accent-color', pal.hsAccent);
+      }
+      if (map.getLayer('paises-fill')) map.setPaintProperty('paises-fill', 'fill-color', pal.land);
+      if (map.getLayer('paises-line'))
+        map.setPaintProperty('paises-line', 'line-color', pal.border);
+    };
+    new MutationObserver(applyPalette).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyPalette);
+
+    const fitPadding = () => (window.innerWidth < 640 ? 26 : 64);
+
+    let ready = false;
+    const start = () => {
+      if (ready) return;
+      ready = true;
+      setup().catch((err) => {
+        console.error('[tripmap] setup failed', err);
+        setStatus(cfg.labels.error);
+      });
+    };
+
+    async function setup() {
+      if (!map.isStyleLoaded()) {
+        await new Promise<void>((res) => map.once('styledata', () => res()));
+      }
+
+      const [paises, route] = (await Promise.all([
+        fetch(cfg.paises).then((r) => r.json()),
+        fetch(cfg.route).then((r) => r.json()),
+      ])) as [GeoJSON.FeatureCollection, GeoJSON.FeatureCollection];
+
+      map.addSource('paises', {
+        type: 'geojson',
+        data: paises,
+        attribution:
+          'Fronteiras: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a>',
+      });
+      map.addLayer(
+        { id: 'paises-fill', type: 'fill', source: 'paises', paint: { 'fill-color': pal.land } },
+        'hillshade',
+      );
+      map.addLayer({
+        id: 'paises-line',
+        type: 'line',
+        source: 'paises',
+        paint: { 'line-color': pal.border, 'line-width': 0.8 },
+      });
+
+      map.addSource('rota', { type: 'geojson', data: route, attribution: 'Rota: Strava' });
+
+      const colorMatch: (string | string[])[] = ['match', ['get', 'chapter_slug']];
+      for (const [slug, hex] of Object.entries(cfg.colors)) colorMatch.push(slug, hex);
+      colorMatch.push('#8a7a63');
+
+      map.addLayer({
+        id: 'rota-shadow',
+        type: 'line',
+        source: 'rota',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': 'rgba(0, 0, 0, 0.28)',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 3, 4, 8, 8, 13, 13],
+          'line-blur': 3,
+        },
+      });
+      map.addLayer({
+        id: 'rota-line',
+        type: 'line',
+        source: 'rota',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': colorMatch as maplibregl.ExpressionSpecification,
+          'line-width': ['interpolate', ['linear'], ['zoom'], 3, 2.2, 8, 4, 13, 6.5],
+        },
+      });
+
+      const all = new maplibregl.LngLatBounds();
+      const byChapter: Record<string, maplibregl.LngLatBounds> = {};
+      for (const f of route.features) {
+        if (f.geometry.type !== 'LineString') continue;
+        const slug = (f.properties?.chapter_slug as string) || 'x';
+        if (!byChapter[slug]) byChapter[slug] = new maplibregl.LngLatBounds();
+        for (const c of f.geometry.coordinates) {
+          all.extend(c as [number, number]);
+          byChapter[slug].extend(c as [number, number]);
+        }
+      }
+
+      const fit = (b: maplibregl.LngLatBounds, animate: boolean) =>
+        map.fitBounds(b, {
+          padding: fitPadding(),
+          pitch: 42,
+          bearing: 0,
+          maxZoom: 9,
+          duration: animate && !reduceMotion ? 1200 : 0,
+        });
+
+      fit(all, false);
+
+      root.querySelectorAll<HTMLButtonElement>('.tripmap__chip').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          root.querySelectorAll('.tripmap__chip').forEach((b) => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          const slug = btn.dataset.chapter || '';
+          fit(slug && byChapter[slug] ? byChapter[slug] : all, true);
+        });
+      });
+
+      const nf = new Intl.NumberFormat(cfg.locale === 'en' ? 'en' : 'pt-BR');
+      const df = new Intl.DateTimeFormat(cfg.locale === 'en' ? 'en' : 'pt-BR', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+      let popup: maplibregl.Popup | null = null;
+
+      map.on('click', 'rota-line', (e) => {
+        const f = e.features?.[0];
+        if (!f) return;
+        const p = f.properties as Record<string, string | number>;
+        const date = df.format(new Date(`${p.date}T12:00:00`));
+        const html =
+          `<strong>${esc(String(p.name))}</strong>` +
+          `<span class="tm-pop__date">${date}</span>` +
+          `<span class="tm-pop__stat">${nf.format(Number(p.distance_km))} ${esc(cfg.labels.km)}` +
+          ` · ${nf.format(Number(p.elev_gain_m))} m ${esc(cfg.labels.climb)}</span>`;
+        popup?.remove();
+        popup = new maplibregl.Popup({
+          offset: 12,
+          closeButton: true,
+          maxWidth: '15rem',
+          className: 'tm-pop',
+        })
+          .setLngLat(e.lngLat)
+          .setHTML(html)
+          .addTo(map);
+      });
+      map.on('mouseenter', 'rota-line', () => (map.getCanvas().style.cursor = 'pointer'));
+      map.on('mouseleave', 'rota-line', () => (map.getCanvas().style.cursor = ''));
+
+      setStatus(null);
+
+      // Terrain is a progressive touch — added after the route is already up.
+      if (!reduceMotion) {
+        try {
+          map.setTerrain({ source: 'dem', exaggeration: 1.3 });
+        } catch (err) {
+          console.warn('[tripmap] terrain unavailable', err);
+        }
+      }
+    }
+
+    map.on('load', start);
+    map.on('idle', start); // fallback: 'load' can lag in some browsers
+    map.on('error', (e) => console.warn('[tripmap]', e.error?.message ?? e));
+  }
+
+  const root = document.querySelector<HTMLElement>('[data-tripmap]');
+  const cfgEl = root?.querySelector('[data-tripmap-config]');
+  if (root && cfgEl?.textContent) {
+    try {
+      init(root, JSON.parse(cfgEl.textContent) as Cfg);
+    } catch (err) {
+      console.error('[tripmap]', err);
+      const st = root.querySelector<HTMLElement>('[data-status]');
+      if (st) st.textContent = (JSON.parse(cfgEl.textContent) as Cfg).labels.error;
+    }
+  }
+</script>
+
+<style>
+  .tripmap {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .tripmap__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .tripmap__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.32rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    transition:
+      color var(--transition),
+      border-color var(--transition),
+      background-color var(--transition);
+  }
+
+  .tripmap__chip:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+
+  .tripmap__chip.is-active {
+    color: var(--ink);
+    border-color: var(--ink-soft);
+    background: var(--surface);
+  }
+
+  .tripmap__dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--chip, var(--accent));
+    margin-right: 0.4rem;
+  }
+
+  .tripmap__canvas {
+    position: relative;
+    height: clamp(22rem, 68vh, 40rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .tripmap__status {
+    position: absolute;
+    inset: 50% 0 auto 0;
+    transform: translateY(-50%);
+    width: max-content;
+    max-width: 90%;
+    margin-inline: auto;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    z-index: 2;
+  }
+
+  .tripmap__hint {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .tripmap__fallback {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tripmap__chip {
+      transition: none;
+    }
+  }
+</style>
+
+<style is:global>
+  .tripmap__canvas .maplibregl-map {
+    font: inherit;
+  }
+
+  .tm-pop .maplibregl-popup-content {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+  }
+
+  .tm-pop .maplibregl-popup-content strong {
+    font-size: var(--step-0);
+    font-weight: 600;
+  }
+
+  .tm-pop .tm-pop__date {
+    color: var(--ink-soft);
+  }
+
+  .tm-pop .tm-pop__stat {
+    color: var(--ink-faint);
+  }
+
+  .tm-pop .maplibregl-popup-close-button {
+    padding: 0 0.35rem;
+    color: var(--ink-faint);
+    font-size: 1.1rem;
+  }
+
+  .tm-pop.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+  .tm-pop.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+  .tm-pop.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+    border-bottom-color: var(--surface);
+  }
+  .tm-pop.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+  .tm-pop.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+  .tm-pop.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+    border-top-color: var(--surface);
+  }
+  .tm-pop.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: var(--surface);
+  }
+  .tm-pop.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: var(--surface);
+  }
+
+  .tripmap__canvas .maplibregl-ctrl-group {
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+  }
+  .tripmap__canvas .maplibregl-ctrl-group button + button {
+    border-top-color: var(--line);
+  }
+  .tripmap__canvas .maplibregl-ctrl-attrib {
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    color: var(--ink-faint);
+  }
+  .tripmap__canvas .maplibregl-ctrl-attrib a {
+    color: var(--ink-soft);
+  }
+
+  :root[data-theme='dark'] .tripmap__canvas .maplibregl-ctrl-icon {
+    filter: invert(1) brightness(1.1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .tripmap__canvas .maplibregl-ctrl-icon {
+      filter: invert(1) brightness(1.1);
+    }
+  }
+</style>

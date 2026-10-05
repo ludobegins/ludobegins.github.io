@@ -1,0 +1,20 @@
+---
+import { render } from 'astro:content';
+import { getEscritos, getSlug } from '../../lib/escritos';
+import Escrito from '../../layouts/Escrito.astro';
+
+export async function getStaticPaths() {
+  const escritos = await getEscritos();
+  return escritos.map((entry) => ({
+    params: { slug: getSlug(entry) },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Escrito entry={entry} locale="pt">
+  <Content />
+</Escrito>

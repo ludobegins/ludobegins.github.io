@@ -1,0 +1,208 @@
+---
+import Base from '../../layouts/Base.astro';
+import SocialLinks from '../SocialLinks.astro';
+import Icon from '../Icon.astro';
+import EscritoCard from '../EscritoCard.astro';
+import { href } from '../../lib/href';
+import { type Locale } from '../../i18n/ui';
+import { t, localeUrl } from '../../i18n/utils';
+import { getEscritos } from '../../lib/escritos';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const s = t(locale).home;
+
+const ultimos = (await getEscritos()).slice(0, 3);
+---
+
+<Base description={s.metaDescription}>
+  <section class="hero wrap wrap--wide">
+    <img
+      class="hero__avatar"
+      src={href('/ludo.jpg')}
+      alt="Ludovic Beghin"
+      width="120"
+      height="120"
+    />
+    <div class="hero__body flow">
+      <p class="eyebrow">{s.eyebrow}</p>
+      <h1>{s.title}</h1>
+      <p class="hero__line">{s.heroLine}</p>
+      <SocialLinks />
+    </div>
+  </section>
+
+  <nav class="doors wrap wrap--wide" aria-label={s.eyebrow}>
+    {
+      s.doors.map((d) => (
+        <a class="door" href={localeUrl(locale, d.path)}>
+          <span class="door__label">
+            {d.label}
+            <Icon name="arrow-right" size={18} class="door__arrow" />
+          </span>
+          <span class="door__text">{d.text}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  {
+    ultimos.length > 0 && (
+      <section class="latest wrap wrap--wide">
+        <div class="latest__head">
+          <h2>{s.latestTitle}</h2>
+          <a class="latest__all" href={localeUrl(locale, 'escritos')}>
+            {s.latestAll}
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+        <div class="latest__list">
+          {ultimos.map((entry) => (
+            <EscritoCard entry={entry} locale={locale} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-l);
+  }
+
+  .hero__avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow);
+  }
+
+  .hero__body {
+    --flow-space: var(--space-s);
+    max-width: 34rem;
+  }
+
+  .hero__line {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    line-height: var(--leading-snug);
+  }
+
+  .doors {
+    display: grid;
+    gap: var(--space-s);
+    padding-bottom: var(--space-l);
+  }
+
+  .latest {
+    padding-bottom: var(--space-2xl);
+  }
+
+  .latest__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .latest__head h2 {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .latest__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .latest__all:hover {
+    color: var(--accent-ink);
+  }
+
+  .latest__list {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .door {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding: var(--space-m) 0;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+    transition: border-color var(--transition);
+  }
+
+  .doors .door:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .door:hover {
+    border-top-color: var(--accent);
+  }
+
+  .door__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--step-2);
+    color: var(--ink);
+  }
+
+  .door__label :global(.door__arrow) {
+    color: var(--ink-faint);
+    transform: translateX(-4px);
+    opacity: 0;
+    transition:
+      transform var(--transition),
+      opacity var(--transition),
+      color var(--transition);
+  }
+
+  .door:hover :global(.door__arrow) {
+    transform: translateX(0);
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  @media (hover: none) {
+    .door__label :global(.door__arrow) {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .door__text {
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 40rem) {
+    .hero {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-l);
+      padding-top: var(--space-2xl);
+    }
+    .hero__avatar {
+      width: 120px;
+      height: 120px;
+    }
+  }
+</style>
