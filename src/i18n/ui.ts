@@ -32,7 +32,8 @@ type Dict = {
     title: string;
     metaDescription: string;
     eyebrow: string;
-    bio: string[];
+    /** Paragraphs; trusted HTML (rendered with set:html). */
+    bioHtml: string[];
     projectsTitle: string;
     projects: { name: string; text: string; href: string }[];
     contactTitle: string;
@@ -134,10 +135,11 @@ const pt: Dict = {
     title: 'Sobre',
     metaDescription: 'Ludovic Beghin — engenheiro de software à procura do próximo desafio.',
     eyebrow: 'Sobre',
-    bio: [
-      'Engenheiro de formação, resolvedor de problemas por índole. Gosto de achar soluções elegantes para problemas complexos — de caçar bugs a desenhar sistemas escaláveis com Python, Angular e AWS. Meu maior trunfo talvez seja adaptar e aprender rápido.',
-      'Depois de uma expedição de bicicleta de oito meses, voltei ao teclado à procura do próximo desafio — de preferência construindo software com impacto ambiental ou social concreto.',
-      'Longe da tela: pedalando estradas remotas, jogando futevôlei, lendo, incomodando os vizinhos com a gaita ou tomando uma cerveja com os amigos.',
+    bioHtml: [
+      'Engenheiro de formação, gosto de quebrar a cabeça pra resolver problemas difíceis — é o que eu acho mais legal na programação. Tenho ~4 anos de experiência full-stack, principalmente com Python, Angular e AWS.',
+      'Agora, como todos na área, me adaptando à nova era pré-distópica "spec-driven", implorando tokens aos nossos novos lordes tecnofeudais. Mas também curtindo que dá pra fazer um site bonitinho com baixo esforço (sem saudades de mexer em CSS). Na área de programação, sou fã do <a href="https://tiangolo.com/" target="_blank" rel="noopener noreferrer">tiangolo</a>.',
+      'Fora do trabalho, gosto de praia, esportes, tocar gaita e passar tempo com as pessoas que amo.',
+      'Meus valores: amizade, curiosidade, natureza, humildade, empatia.',
     ],
     projectsTitle: 'Projetos',
     projects: [
@@ -258,10 +260,11 @@ const en: Dict = {
     title: 'About',
     metaDescription: 'Ludovic Beghin — software engineer looking for the next challenge.',
     eyebrow: 'About',
-    bio: [
-      'Engineer by training, problem-solver at heart. I love finding elegant solutions to complex problems, from hunting down bugs to architecting scalable systems with Python, Angular, and AWS. I think my greatest asset is being able to adapt and learn quickly.',
-      "After a recent 8-month bicycle expedition, I'm back at the keyboard and looking for my next challenge — ideally building software that makes a tangible environmental or social impact.",
-      "When I'm off-screen: cycling remote roads, playing footvolley, reading, annoying my neighbours with my harmonica, or sharing a beer with friends.",
+    bioHtml: [
+      "Engineer by training, I like racking my brain over hard problems — that's what I enjoy most about programming. I have ~4 years of full-stack experience, mostly with Python, Angular and AWS.",
+      'Right now, like everyone in the field, adapting to the new pre-dystopian "spec-driven" era, begging our new technofeudal overlords for tokens. But also enjoying that you can build a nice little site with low effort (not missing fiddling with CSS). In the programming world, I\'m a fan of <a href="https://tiangolo.com/" target="_blank" rel="noopener noreferrer">tiangolo</a>.',
+      'Outside of work, I like the beach, sports, playing harmonica and spending time with the people I love.',
+      'My values: friendship, curiosity, nature, humility, empathy.',
     ],
     projectsTitle: 'Projects',
     projects: [

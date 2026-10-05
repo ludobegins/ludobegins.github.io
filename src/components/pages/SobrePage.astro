@@ -20,7 +20,7 @@ const s = t(locale).sobre;
     </header>
 
     <div class="bio flow">
-      {s.bio.map((p) => <p>{p}</p>)}
+      {s.bioHtml.map((p) => <p set:html={p} />)}
     </div>
 
     <section class="section flow">
