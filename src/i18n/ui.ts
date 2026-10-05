@@ -149,7 +149,7 @@ const pt: Dict = {
       {
         name: 'Este site',
         text: 'Feito em Astro, sem backend. Código aberto no GitHub.',
-        href: 'https://github.com/ludobegins/ludoblog',
+        href: 'https://github.com/ludobegins/ludobegins.github.io',
       },
     ],
     contactTitle: 'Contato',
@@ -268,7 +268,7 @@ const en: Dict = {
       {
         name: 'This site',
         text: 'Built with Astro, no backend. Open source on GitHub.',
-        href: 'https://github.com/ludobegins/ludoblog',
+        href: 'https://github.com/ludobegins/ludobegins.github.io',
       },
     ],
     contactTitle: 'Contact',

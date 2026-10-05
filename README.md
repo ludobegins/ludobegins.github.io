@@ -10,7 +10,7 @@ O planejamento e o roteiro de fases estão em [`PLAN.md`](./PLAN.md).
 
 ```bash
 npm install
-npm run dev       # http://localhost:4321/ludoblog/
+npm run dev       # http://localhost:4321/
 npm run build     # gera dist/
 npm run preview   # serve o build
 npm run format    # prettier
@@ -32,6 +32,5 @@ public/                      # imagens e assets estáticos
 
 ## Deploy
 
-Configurado para GitHub Pages como _project site_
-(`https://ludobegins.github.io/ludoblog/`). Se o repositório for renomeado para
-`ludobegins.github.io`, ajustar `base` em `astro.config.mjs` para `'/'`.
+Configurado para GitHub Pages como _user site_ (repo `ludobegins.github.io`),
+servido na raiz: `https://ludobegins.github.io/` (`base: '/'` em `astro.config.mjs`).

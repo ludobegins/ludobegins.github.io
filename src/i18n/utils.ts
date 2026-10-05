@@ -1,6 +1,6 @@
 import { ui, locales, defaultLocale, type Locale } from './ui';
 
-const BASE = import.meta.env.BASE_URL; // "/ludoblog/" or "/"
+const BASE = import.meta.env.BASE_URL; // "/" (or e.g. "/ludoblog/" on a project site)
 
 function stripBase(pathname: string): string {
   const base = BASE.endsWith('/') ? BASE.slice(0, -1) : BASE;

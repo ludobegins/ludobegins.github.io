@@ -18,7 +18,7 @@ seção de escritos (poesia em primeiro lugar) e um mapa 3D da viagem de bicicle
 | Seção profissional | **Enxuta**: bio + poucos projetos + contato. Sem timeline nem CV em PDF (por ora).                                              |
 | Viagem             | **Scrollytelling** (câmera voando pela rota, texto e foto por trecho) **+ modo explorar** livre no fim.                         |
 | Mapa               | **MapLibre GL JS** (open source, sem API token — importante em repo público). Terreno 3D nativo.                                |
-| Hospedagem         | **GitHub Pages** (já configurado). `base: '/ludoblog'`. Se o repo virar `ludobegins.github.io`, mudar para `base: '/'`.         |
+| Hospedagem         | **GitHub Pages** (já configurado). Repo `ludobegins.github.io`, `base: '/'`.         |
 | Cor de acento      | **Laranja queimado / ocre** sobre papel kraft (fundo cor de areia). Dark mode marrom-escuro (sistema + toggle).                 |
 | Tipografia         | **Hanken Grotesk** (sans humanista, variável) para tudo — títulos, corpo e verso.                                               |
 | Comentários        | Não, por enquanto. (Depois: giscus, se fizer sentido.)                                                                          |
@@ -151,7 +151,7 @@ responsivos + placeholder. Fotos dos demais pontos entram aos poucos.
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321/ludoblog/
+npm run dev      # http://localhost:4321/
 npm run build    # -> dist/
 npm run preview
 ```

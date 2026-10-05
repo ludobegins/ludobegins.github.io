@@ -4,10 +4,9 @@ import sitemap from '@astrojs/sitemap';
 import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
 
-// Deployed to GitHub Pages as a project site: https://ludobegins.github.io/ludoblog/
-// If the repo is later renamed to `ludobegins.github.io`, set `base: '/'` (or drop it).
+// Deployed to GitHub Pages as the user site (repo `ludobegins.github.io`): https://ludobegins.github.io/
 const site = 'https://ludobegins.github.io';
-const base = '/ludoblog';
+const base = '/';
 
 // https://astro.build/config
 export default defineConfig({

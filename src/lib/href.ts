@@ -1,4 +1,4 @@
-const BASE = import.meta.env.BASE_URL; // e.g. "/ludoblog/" or "/"
+const BASE = import.meta.env.BASE_URL; // "/" (or e.g. "/ludoblog/" on a project site)
 
 /**
  * Build an internal URL that respects Astro's configured `base`.
